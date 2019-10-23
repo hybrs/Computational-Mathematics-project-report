@@ -1,0 +1,184 @@
+\section{Descrizione del problema}
+
+Date le matrici $Q \in \mathbb{R}^{n \times n}$ ed $A \in \lbrace0, 1\rbrace^{k\times n}$, con $Q\succeq 0$, e i vettori $q\in\mathbb{R}^n$ e $b=[1]^k$, il problema di ottimizzazione quadratica convessa primale $P$ è definito come:
+
+\begin{equation} \label{eq:primal_problem}
+P := \begin{cases} {min }\;\; x^\intercal Qx+q^\intercal x \\ Ax=b \\x\geq 0\end{cases}
+\end{equation}
+
+dove i vincoli nella matrice $A$ formano $k$ simplessi disgiunti della forma:
+
+\begin{equation} \label{eq:vincoli}
+\sum_{i \in I^h} x_i = 1, h = 1, \dots, k
+\end{equation}
+
+con $I^h, h = 1, \dots, k$ insiemi di indici che formano una partizione di $\{1,\dots,n\}$. Quindi il generico elemento della matrice $A$ $a_{vi} = 1 \Longleftrightarrow i \in I^v$.
+
+Data la funzione da minimizzare in \ref{eq:primal_problem} $f(x) = x^\intercal Qx +q^\intercal x$ e la sua \emph{funzione Lagrangiana} $L(x,\lambda_{eq}, \lambda_s)$, a $P$ si può associare il seguente \emph{Problema Duale di Wolfe} $D$:
+
+\begin{equation} \label{eq:dual_problem}
+D := \begin{cases}\mathrm{max} \;\; L(x,\lambda_{eq},\lambda_s)\\
+\nabla _x L(x, \lambda_{eq}, \lambda_s) = 0 \\
+\lambda_s \geq 0
+\end{cases}
+= 
+\begin{cases} \mathrm{max}\;\;  x^\intercal Qx +q^\intercal x + \lambda^\intercal_{eq}(Ax - b) +\lambda^\intercal_s(-x)\\
+2Qx + q + A^\intercal \lambda_{eq} -\lambda_s= 0 \\
+\lambda_s \geq 0
+\end{cases}
+\end{equation}
+
+Possiamo a questo punto scrivere il sistema KKT associato a $P$.
+
+\begin{equation} \label{eq:kkt}
+    \begin{cases}\nabla _x L(x, \lambda_{eq}, \lambda_s) = 0 \\
+        Ax - b = 0\\
+        x_i  \lambda_{s_i} = 0 \;\;\;\;\;\;\; i = 1, \dots, n \\
+        (x,\lambda_s) \geq 0
+    \end{cases}
+\end{equation}
+
+\begin{comment}
+\rightarrow
+\begin{bmatrix}
+\nabla _x L(x, \lambda_{eq}, \lambda_s)\\Ax - b\\XSe
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\ 0 \\0
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+2Q & A^\intercal & -I\\
+A & 0 & 0 \\
+S & 0 & X
+\end{bmatrix}
+\;
+\begin{bmatrix}
+x \\ \lambda_{eq} \\ \lambda_s
+\end{bmatrix}
+=
+\begin{bmatrix}
+-q\\ b \\ 0
+\end{bmatrix}
+\end{comment}
+
+Scegliamo dunque di risolvere il sistema \ref{eq:kkt} applicando il metodo Primal-Dual Interior Point (PDIP): riformuliamo le condizioni di ottimalità \ref{eq:kkt} 
+definendo una funzione $F : \mathbb{R}^{2n+k} \rightarrow \mathbb{R}^{2n+k}$ \cite{Nocedal2006Numerical}:
+\begin{subequations}
+\begin{equation} \label{eq:F}
+F(x, \lambda_{eq}, \lambda_s)=
+\begin{bmatrix}
+\nabla _x L(x, \lambda_{eq}, \lambda_s)\\Ax - b\\XSe
+\end{bmatrix}
+=0
+\end{equation}
+\begin{equation} \label{eq:nonneg}
+\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;(x,\lambda_s)\geq 0
+\end{equation}
+\end{subequations}
+dove
+
+\begin{equation} \label{eq:xs}
+    X = diag(x_1, \dots, x_n) \;\;\;\;\;\;\;\;\;\;\;\; 
+    S = diag(\lambda_{s_1}, \dots, \lambda_{s_n}) \;\;\;\;\;\;\;\;\;\;\;\; 
+    e^\intercal = [1, \dots, 1] \in \mathbb{R}^n
+\end{equation}
+
+Il metodo PDIP, ad ogni iterazione $k$, genera triple $(x^k, \lambda_{eq}^k, \lambda_{s}^k)$ 
+che soddisfano \emph{strettamente} la \ref{eq:nonneg}.\\
+La procedura con la quale si ricercano le direzioni $(\Delta x, \Delta \lambda_{eq}, \Delta \lambda_s)$ 
+prende origine dal metodo di Newton per equazioni non lineari \cite{Nocedal2006Numerical}: 
+alla $k$-esima iterazione il metodo di Newton forma un modello lineare di $F$ 
+attorno al punto corrente $(x^k, \lambda_{eq}^k, \lambda_{s}^k)$ e ottiene 
+le direzioni di ricerca risolvendo il seguente sistema lineare:
+
+\begin{equation} \label{eq:J}
+J(x, \lambda_{eq}, \lambda_s) \begin{bmatrix}
+\Delta x \\ \Delta \lambda_{eq}\\ \Delta \lambda_s
+\end{bmatrix} = -F(x, \lambda_{eq}, \lambda_{s})
+\end{equation}
+
+dove $J$ è la Jacobiana di $F$. Nel nostro caso il sistema da risolvere diventa:
+
+\begin{equation} \label{eq:defKKT}
+\begin{bmatrix}
+2Q & A^\intercal & -I\\
+A & 0 & 0 \\
+S & 0 & X
+\end{bmatrix}\begin{bmatrix}\Delta x \\ \Delta \lambda_{eq} \\ \Delta \lambda_{s} \end{bmatrix}= -
+\begin{bmatrix}
+    r_d\\r_p\\XSe
+\end{bmatrix}
+\end{equation}
+
+dove
+\begin{equation} \label{eq:res}
+    r_d=2Qx +q A^\intercal \lambda_{eq} -\lambda_s \;\;\;\;\;\;\;\;\;\;\;\;\;\; r_p=Ax-b
+\end{equation}
+
+Percorrere un passo intero lungo le direzioni trovate risolvendo \ref{eq:defKKT} potrebbe violare il vincolo $(x, \lambda_s)\geq 0$, 
+quindi aggiungiamo una parametro $\alpha \in (0,1]$, detto \textit{step-size}, che servirà a ridurre l'ampiezza
+ del passo $(\Delta x, \Delta \lambda_{eq},\Delta \lambda_s)$  per garantire il soddisfacimento del vincolo \ref{eq:nonneg}.
+ \begin{equation} \label{eq:stepsize}
+    (x^{k+1}, \lambda_{eq}^{k+1}, \lambda_{s}^{k+1}) = (x^k, \lambda_{eq}^k, \lambda_{s}^k) + \alpha (\Delta x, \Delta \lambda_{eq}, \Delta\lambda_s) 
+ \end{equation}
+ 
+ Data la corrente iterazione $(x^k, \lambda_{eq}^k, \lambda_{s}^k)$
+ , che soddisfa \ref{eq:nonneg}, introduciamo il \textit{centering parameter} $\sigma \in[0,1]$ e la \textit{duality measure} $\mu = \frac{x^\intercal \lambda_s}{n}$; questi due parametri vengono utilizzati per direzionare il Newton step verso un punto per il quale valga $x_i \lambda_{s_i} = \sigma\mu $, piuttosto che a una soluzione diretta di \ref{eq:kkt}.
+ A seguito di questa considerazione, il nuovo step verrà calcolato risolvendo il \textit{KKT perturbato} definito come:
+ 
+ \begin{equation} \label{eq:pkkt}
+\begin{bmatrix}
+2Q & A^\intercal & -I\\
+A & 0 & 0 \\
+S & 0 & X
+\end{bmatrix}\begin{bmatrix}\Delta x \\ \Delta \lambda_{eq} \\ \Delta \lambda_{s} \end{bmatrix}= -
+\begin{bmatrix}
+    r_d\\r_p\\XSe - \sigma\mu e
+\end{bmatrix}
+\end{equation}
+
+Il sistema \ref{eq:pkkt} è non-simmetrico, lo trasformiamo in un sistema lineare equivalente simmetrico, eliminando la terza riga ed esprimendo $\Delta \lambda_s$ in funzione di $\Delta x$.
+
+La terza riga di \ref{eq:pkkt} può essere eliminata poichè durante le iterazioni $x_i$ ed $s_i$ rimangono strettamente positivi; per ricavare $\Delta \lambda_s$ in funzione di $\Delta x$ dobbiamo prima isolare $\Delta \lambda_s$ sempre dalla terza riga del sistema:
+
+\begin{equation} \label{eq:deltas}
+\begin{split}
+    S\Delta x + X \Delta \lambda_s &= -XSe + \sigma \mu e\\
+    X \Delta \lambda_s &=\sigma \mu e -XSe -S\Delta x\\
+    \Delta \lambda_s &= X^{-1}(\sigma \mu e - S\Delta x) - \lambda_s
+\end{split}
+\end{equation}
+possiamo dunque riscrivere \ref{eq:pkkt} sostituendo $\Delta \lambda_s$ come in \ref{eq:deltas}:
+\begin{equation}\label{eq:deltax}
+    \begin{split}
+        2Q\Delta x + A^\intercal \Delta \lambda_{eq} - \Delta \lambda_s &= -2Qx-q-A^\intercal \lambda_{eq} +\lambda_s\\
+        2Q\Delta x + A^\intercal \Delta \lambda_{eq} - X^{-1}(\sigma \mu e - S\Delta x) + \cancel{\lambda_s} &= -2Qx-q-A^\intercal \lambda_{eq} + \cancel{\lambda_s}\\
+        (2Q +X^{-1}S)\Delta x + A^\intercal \Delta \lambda_{eq} &= -2Qx -q -A^\intercal \lambda_{eq} + X^{-1} \sigma \mu e
+    \end{split}
+\end{equation}
+ponendo $M=2Q + X^{-1}S$ otteniamo il seguente sistema simmetrico detto anche \emph{augmented KKT}:
+
+\begin{subequations}\label{eq:aguKKT}
+\begin{equation} \label{eq:pkkt2}
+\begin{bmatrix}
+2Q +X^{-1}S & A^\intercal\\
+A & 0 \\
+\end{bmatrix}\begin{bmatrix}\Delta x \\ \Delta \lambda_{eq}\end{bmatrix}= -
+\begin{bmatrix}
+    r_d-X^{-1}\sigma \mu e\\r_p
+\end{bmatrix}
+\end{equation}
+\begin{equation} \label{eq:dds}
+\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\Delta \lambda_s = X^{-1}(\sigma \mu e - S\Delta x) - \lambda_s
+\end{equation}
+\end{subequations}
+
+la matrice a sinistra in \ref{eq:pkkt2} è simmetrica poichè:
+\begin{itemize}
+    \item M è simmetrica perchè somma di una matrice simmetrica e una matrice diagonale
+    \item il blocco inferiore sinistro e superiore destro sono l'uno il trasposto dell'altro
+\end{itemize}
+inoltre se $A$ ha rango massimo essa è non-singolare, e \ref{eq:pkkt2} ammette soluzione. I vincoli in $A$, nel nostro caso di studio, formano $k$ simplessi disgiunti, quindi $rank(A)=k$.
+
