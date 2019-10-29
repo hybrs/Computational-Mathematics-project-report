@@ -182,3 +182,8 @@ la matrice a sinistra in \ref{eq:pkkt2} è simmetrica poichè:
 \end{itemize}
 inoltre se $A$ ha rango massimo essa è non-singolare, e \ref{eq:pkkt2} ammette soluzione. I vincoli in $A$, nel nostro caso di studio, formano $k$ simplessi disgiunti, quindi $rank(A)=k$.
 
+
+Il sistema \ref{eq:pkkt2} è dunque simmetrico, sparso e la matrice potrebbe essere mal condizionata a causa del prodotto $X^{-1}S$. Il metodo solitamente 
+utilizzato per risolvere sistemi simmetrici sparsi è MINRES, ma non essendo stato affrontato durante il corso, utilizzeremo una sua generalizzazione, GMRES.
+
+Avremmo potuto anche optare per LU-factorization, ma avrebbe sofferto di gravi problemi di stabilità sulle nostre istanze.
