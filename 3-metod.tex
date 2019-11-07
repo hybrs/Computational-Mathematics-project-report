@@ -7,6 +7,7 @@ superiore $v(P)$ ed inferiore $v(D)$ della soluzione.
 Da $P$ e $D$ si ricava quindi il sistema KKT \ref{eq:pkkt2} associato e una misura
  della distanza della soluzione attuale dall'ottimo, detta \textit{complementary gap};
   definita come la differenza fra il valore della funzione obiettivo in $P$ e in $D$, eventualmente normalizzata.
+  
   Ad ogni iterazione, una volta trovata una soluzione per \ref{eq:pkkt2}, calcoliamo una nuova coppia di soluzioni primali/duali 
   e riduciamo il complementary gap.
 
@@ -16,16 +17,85 @@ Da $P$ e $D$ si ricava quindi il sistema KKT \ref{eq:pkkt2} associato e una misu
 \caption{pseudocodice Interior-Point Primal-Dual method}\label{alg:pseudo}
 \begin{algorithmic}[1]
 \Function{PDIP}{Q, q, A, b, eps, maxit}
-\State inizializza $(\textit{x}_0, \textit{\lambda}_{eq}, \textit{\lambda}_{s}) \geq 0 random
-\BState \textbf{while} \emph{true}:
-\If {$\textit{string}(i) = \textit{path}(j)$}
-\State $j \gets j-1$.
-\State $i \gets i-1$.
-\State \textbf{goto} \emph{loop}.
-\State \textbf{close};
-\EndIf
-\State $i \gets i+\max(\textit{delta}_1(\textit{string}(i)),\textit{delta}_2(j))$.
-\State \textbf{goto} \emph{top}.
+\State \textit{inizializzare} $(x^0, \lambda_{eq}^0, \lambda_s^0) > 0$ 
+\State $\mu^0 \gets (x^0^\intercal \lambda_s^0)/n$
+\State $\sigma \in [0,1]$
+\State $k \gets 0$
+\BState \textbf{while} \emph{!stoppingCriteria()}:
+\State $\mu^{k+1} \gets \sigma \mu^{k}  $
+
+\State \textit{risolvere} \;$
+\begin{bmatrix}
+2Q +X^{-1}S & A^\intercal\\
+A & 0 \\
+\end{bmatrix}\begin{bmatrix}\Delta x^{k+1} \\ \Delta \lambda_{eq}^{k+1}\end{bmatrix}= -
+\begin{bmatrix}
+    r_d-X^{-1}\mu^{k+1} e\\r_p
+\end{bmatrix}
+$
+
+\State $\Delta \lambda_s^{k+1} \gets X^{-1}(\mu^{k+1} e - S\Delta x^{k+1}) - \lambda_s^{k}$ 
+
+\State \textit{calcolare} \; $(\alpha_x^{k+1}, \alpha_{\lambda_{eq}}^{k+1}, \alpha_{\lambda_{s}}^{k+1})$ 
+\textit{tale che} $(x^{k+1},\lambda_{s}^{k+1})>0$
+
+
+\State $(x^{k+1}, \lambda_{eq}^{k+1}, \lambda_{s}^{k+1}) \gets
+(x^{k}, \lambda_{eq}^{k}, \lambda_{s}^{k}) + 
+(\alpha_x^{k+1}\Delta_x^{k+1}, \alpha_{\lambda_{eq}}^{k+1}\Delta_{\lambda_{eq}}^{k+1}, \alpha_{\lambda_{s}}^{k+1}\Delta_{\lambda_{s}}^{k+1})$
+
+\State $k \gets k + 1$
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
+
+Nell'algoritmo sopra descritto sono cruciali la scelta della tripla iniziale (riga 2) e la scelta di $\alpha$ (riga 10); nelle sezioni seguenti descriveremo le nostre scelte progettuali a riguardo.
+Le condizioni di stop scelte (riga 6) sono descritte in \ref{cap:stop}.
+
+Mentre il sistema della riga 8 verrà risolto con il metodo GMRES presente in \texttt{MATLAB}, del quale discuteremo brevemente nella sezione \ref{cap:GMRES}.
+
+\subsection{Inizializzazione variabili}
+Poichè il nostro algoritmo amette come punto iniziale un punto che soddisfi solo \ref{eq:nonneg}, scegliamo di inizializzare la tripla $(x^0, \lambda_{eq}^0, \lambda_s^0)$ con valori positivi, casuali e dell'ordine di $10^{-1}$. 
+
+\subsection{Scelta dello step-size $\alpha$}
+Scegliamo di utilizzare uno step-size distinto per ogni vettore della tripla $(x, \lambda_{eq}, \lambda_s)$.
+Poichè vogliamo assicurare che, muovendoci lungo le direzioni trovate risolvendo il sistema \ref{eq:pkkt2}, i soli vincoli di non negatività in \ref{eq:nonneg} siano soddisfatti, scegliamo il massimo $\alpha$ tale che i vincoli non vengano violati.
+Per il generico vettore $d \in \{x,\lambda_{eq},\lambda_s\} $ 
+\begin{equation}\label{eq:alpha}
+    \alpha^d_{max} = \min (1, \underset{i:\Delta d_i < 0}{min}-\frac{d_i}{\Delta d_i})
+\end{equation}
+
+E quindi scegliamo lo step $\alpha$ come segue:
+\begin{equation}\label{eq:alphaFinale}
+\alpha^d = \min(1, \eta \alpha^d_{max}) \;\;\;\;\;\; dove\;\;\; \eta \in [0.9, 1)
+\end{equation}
+
+
+\subsection{Criteri di stop}\label{cap:stop}
+L'algoritmo può terminare sia perchè è stato raggiunto il numero massimo di iterazioni deciso dall'utente, oppure perchè le seguenti condizioni vengono soddisfatte contemporaneamente.
+
+\begin{subequations}
+\begin{equation}
+\|\nabla _x L(x, \lambda_{eq}, \lambda_s)\|_2 \leq \epsilon_{d}
+\end{equation}
+\begin{equation}
+   \| Ax - b\|_2 \leq \epsilon_{p}
+\end{equation}
+\begin{equation}
+    \|XSe\|_2 \leq \epsilon_{s}
+\end{equation}
+\end{subequations}
+
+\subsection{GMRES}\label{cap:GMRES}
+GMRES è un metodo iterativo per la soluzioni di sistemi lineari $Ax=b$ non simmetrici di grandi dimensioni.
+La soluzione esatta del sistema è $x_\ast = A^{-1}b$.
+L'idea del metodo GMRES è di approssimare la soluzione $x_\ast$ al passo $n$ con un vettore $x_n \in K_n$, dove $K_n$ è il Krylov subspace $\langle b, Ab,\dots,A^{n-1}b\rangle$, che minimizza la norma del residuo $r_n = b - Ax_n$.
+Questo si traduce in determinare $x_n$ risolvendo un least squares problem.
+
+
+\subsection{Convergenza del metodo}\label{cap:Convergenza}
+
+I risultati teorici sulla convergenza dei metodi DPIP \cite{Nocedal2006Numerical} dimostrano che effettuando scelte appropriate sulla tripla iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$, per $\epsilon > 0$ fissato, il limite superiore al numero delle iterazioni per garantire la convergenza dell'algoritmo è $log(n\; log(1/\epsilon))$ dove $n$ è l'input size del problema.
+
+Il nostro metodo è di tipo \textit{infeasible}, 
+ovvero ammette un punto iniziale che non soddisfi i vincoli in $P$ e $D$, ma data la scelta di uno step size diverso per il problema primale e duale, e l'aggiunta del centering parameter - scelte che in pratica aumentano la velocità di convergenza - ci aspettiamo che il nostro metodo converga comunque in un numero di iterazioni di $\approx 100$, per $n \rightarrow \infty$, come empiricamente osservato sui metodi di questa classe.

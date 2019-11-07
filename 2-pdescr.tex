@@ -114,7 +114,7 @@ S & 0 & X
 
 dove
 \begin{equation} \label{eq:res}
-    r_d=2Qx +q A^\intercal \lambda_{eq} -\lambda_s \;\;\;\;\;\;\;\;\;\;\;\;\;\; r_p=Ax-b
+    r_d=2Qx +q + A^\intercal \lambda_{eq} -\lambda_s \;\;\;\;\;\;\;\;\;\;\;\;\;\; r_p=Ax-b
 \end{equation}
 
 Percorrere un passo intero lungo le direzioni trovate risolvendo \ref{eq:defKKT} potrebbe violare il vincolo $(x, \lambda_s)\geq 0$, 
@@ -186,4 +186,4 @@ inoltre se $A$ ha rango massimo essa è non-singolare, e \ref{eq:pkkt2} ammette 
 Il sistema \ref{eq:pkkt2} è dunque simmetrico, sparso e la matrice potrebbe essere mal condizionata a causa del prodotto $X^{-1}S$. Il metodo solitamente 
 utilizzato per risolvere sistemi simmetrici sparsi è MINRES, ma non essendo stato affrontato durante il corso, utilizzeremo una sua generalizzazione, GMRES.
 
-Avremmo potuto anche optare per LU-factorization, ma avrebbe sofferto di gravi problemi di stabilità sulle nostre istanze.
+Data la simmetria del sistema lineare da risolvere, avremmo potuto anche optare per LDL-factorization, ma non è da escludere che nel nostro problema l'algoritmo possa incontrare degli zero-pivot. Sebbene esistano tecniche che consistono nel trattare un blocco 2x2 come pivot, ovviando cosi al problema, risolveremo il sistema \ref{eq:pkkt2} con il metodo iterativo GMRES. 
