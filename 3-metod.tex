@@ -4,6 +4,28 @@ L'intuizione principale dei metodi Primal-Dual è
 quella di considerare sia il problema di minimizzazione
  $P$ che il suo duale $D$ per ottenere un limite 
 superiore $v(P)$ ed inferiore $v(D)$ della soluzione.
-Da $P$ e $D$ si ricava quindi il sistema KKT associato \ref{eq:pkkt2}.
+Da $P$ e $D$ si ricava quindi il sistema KKT \ref{eq:pkkt2} associato e una misura
+ della distanza della soluzione attuale dall'ottimo, detta \textit{complementary gap};
+  definita come la differenza fra il valore della funzione obiettivo in $P$ e in $D$, eventualmente normalizzata.
+  Ad ogni iterazione, una volta trovata una soluzione per \ref{eq:pkkt2}, calcoliamo una nuova coppia di soluzioni primali/duali 
+  e riduciamo il complementary gap.
 
-Ad ogni iterazione il \emph{complementary gap} viene ridotto,  
+  Con gli elementi presentati finora possiamo delineare la struttura dello pseudocodice del nostro metodo come segue:
+
+\begin{algorithm}
+\caption{pseudocodice Interior-Point Primal-Dual method}\label{alg:pseudo}
+\begin{algorithmic}[1]
+\Function{PDIP}{Q, q, A, b, eps, maxit}
+\State inizializza $(\textit{x}_0, \textit{\lambda}_{eq}, \textit{\lambda}_{s}) \geq 0 random
+\BState \textbf{while} \emph{true}:
+\If {$\textit{string}(i) = \textit{path}(j)$}
+\State $j \gets j-1$.
+\State $i \gets i-1$.
+\State \textbf{goto} \emph{loop}.
+\State \textbf{close};
+\EndIf
+\State $i \gets i+\max(\textit{delta}_1(\textit{string}(i)),\textit{delta}_2(j))$.
+\State \textbf{goto} \emph{top}.
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
