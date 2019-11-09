@@ -1,5 +1,5 @@
-function [x, fval, lambda, exit_code] =  PDIP(problem, maxit, eps)
-
+function [x, fval, lambda, exit_code] =  PDIP(problem, maxit, eps, epsd, epsp)
+warning("off", "all");
 Q = problem.Q;
 q = problem.q;
 
@@ -13,11 +13,9 @@ k = size(A);
 k = k(1);
 
 %init the starting point (x0, lambda_eq0, lambda_s0)
-x0 = rand(n,1);
-lambda_eq = rand(k, 1);%1e-6 * ones( k , 1 );
-lambda_s = rand(n, 1);%1e-6 * ones( n , 1 );
-
-lambda = struct('leq', lambda_eq, 'ls', lambda_s);
+[x0, lambda] = feasible_sp(A, Q, q);
+lambda_eq = lambda.eqlin;
+lambda_s = lambda.lower;
 
 alpha = 0.1;
 mu = (x0'*lambda_s)/n;
@@ -45,14 +43,15 @@ while true
     
     rd = norm(gradL, 2);
     rp = norm(A*x - b, 2);
-    rxs = lambda_s'*x;
+    rxs = norm(lambda_s'*x, 2);
     
     fprintf( '%4d\t\t%1.3e\t\t%1.3e\t%1.3e\t%1.3e\n' , it , gap, rd, rp, rxs);
     
-    if it == 100
+    if it == maxit
         fprintf( 'iter\t\tgap\t\tdualf\tprimalf\tsTx\n\n' );
         fprintf( 'Execution terminated because reached iteration limit\n');
-        lambda = struct('leq', lambda_eq, 'ls', lambda_s);
+        lambda.lower = lambda_s;
+        lambda.eqlin = lambda_eq;
         exit_code = 3;
         break
     end
@@ -60,16 +59,29 @@ while true
     if abs(gap) <= eps
         fprintf( 'iter\t\tgap\t\tdualf\tprimalf\tsTx\n\n' );
         fprintf( 'Execution terminated because duality gap reduced under the threshold\n');
-        lambda = struct('leq', lambda_eq, 'ls', lambda_s);
+        lambda.lower = lambda_s;
+        lambda.eqlin = lambda_eq;
         exit_code = 1;
         break
     end
     
-    if rd <= eps && rp <= eps && rxs <= eps
+    if rd <= epsd && rp <= epsp && rxs <= eps
         fprintf( 'iter\t\tgap\t\tdualf\tprimalf\tsTx\n\n' );
         fprintf( 'Execution terminated because stopping criteria all matched\n');
-        lambda = struct('leq', lambda_eq, 'ls', lambda_s);
+        lambda.lower = lambda_s;
+        lambda.eqlin = lambda_eq;
         exit_code = 2;
+        break
+    end
+    
+    
+    
+    if it > 1 && norm(x-xprec, 2) <= epsd && abs(fval-fprec) <= epsd
+        fprintf( 'iter\t\tgap\t\t\tdualf\t\tprimalf\t\tsTx\n\n' );
+        fprintf( 'Execution terminated because saddle point\n');
+        lambda.lower = lambda_s;
+        lambda.eqlin = lambda_eq;
+        exit_code = 4;
         break
     end
     
@@ -78,7 +90,7 @@ while true
     M=2*Q+diag(lambda_s.*(1./x));
     
     J = [M, A';A, zeros(k, k)];
-    r = -[ gradL - diag(1./x)*(sigma*mu*ones(n,1));A*x-b];
+    r = -[ gradL - diag(1./x)*(sigma*mu*ones(n,1)) + lambda_s ;A*x-b];
     
     tol = 1e-15;
     maxit  = size(J);
@@ -108,6 +120,7 @@ while true
     end
     %maxt = 0.995*maxt;
     xprec = x; 
+    fprec = fval;
     x = x + (0.995*alphax)*dx;
     lambda_s = lambda_s + (0.995*alphas)*dl_s;
     lambda_eq = lambda_eq + dl_eq;
