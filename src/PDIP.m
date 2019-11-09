@@ -27,6 +27,9 @@ fprintf('-------------------------------------\n');
 
 x = x0;
 it = 0;
+gap = inf;
+rd = inf;
+
 
 while true
     it=it+1;
@@ -38,9 +41,11 @@ while true
     primal = fval;
     dual = - lambda_eq' * b - x'*Qx ;
     
+    
+    gapprec = gap;
     gap = ( primal - dual ) / max( abs( primal ) , 1 );
     
-    
+    rdprec = rd;
     rd = norm(gradL, 2);
     rp = norm(A*x - b, 2);
     rxs = norm(lambda_s'*x, 2);
@@ -76,9 +81,10 @@ while true
     
     
     
-    if it > 1 && norm(x-xprec, 2) <= epsd && abs(fval-fprec) <= epsd
+    if it > 1 && ((norm(x-xprec, 2) <= eps && abs(fval-fprec) <= eps) || ( abs(gap)/abs(gapprec) >= 1 && it > 2 && rdprec < rd && rd/rdprec >= 1))
         fprintf( 'iter\t\tgap\t\t\tdualf\t\tprimalf\t\tsTx\n\n' );
-        fprintf( 'Execution terminated because saddle point\n');
+        fprintf( 'Execution terminated because non-decreasing gap and dual residual\n |gap|/|gapprec| = %4d\t\trd/rdprec = %4d\n', abs(gap)/abs(gapprec), rd/rdprec);
+        fprintf( '|x-xprec| = %4d\t\tfval-fvalprec = %4d\n', norm(x-xprec, 2), abs(fval-fprec))
         lambda.lower = lambda_s;
         lambda.eqlin = lambda_eq;
         exit_code = 4;
