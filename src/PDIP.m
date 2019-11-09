@@ -1,4 +1,4 @@
-function [x, fval, lambda, exit_code] =  PDIP(problem, maxit, eps, epsd, epsp)
+function [x, fval, lambda, exit_code] =  PDIP(problem, maxitt, eps, epsd, epsp)
 warning("off", "all");
 Q = problem.Q;
 q = problem.q;
@@ -52,7 +52,7 @@ while true
     
     fprintf( '%4d\t\t%1.3e\t\t%1.3e\t%1.3e\t%1.3e\n' , it , gap, rd, rp, rxs);
     
-    if it == maxit
+    if it == maxitt
         fprintf( 'iter\t\tgap\t\tdualf\tprimalf\tsTx\n\n' );
         fprintf( 'Execution terminated because reached iteration limit\n');
         lambda.lower = lambda_s;
@@ -99,7 +99,7 @@ while true
     r = -[ gradL - diag(1./x)*(sigma*mu*ones(n,1)) + lambda_s ;A*x-b];
     
     tol = 1e-15;
-    maxit  = size(J);
+    maxit = size(J);
     maxit = maxit(1);
     
     
