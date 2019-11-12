@@ -1,5 +1,6 @@
-function [x, fval, lambda, exit_code] =  PDIP(problem, maxitt, eps, epsd, epsp)
+function [x, fval, lambda, exit_code, time] =  PDIP(problem, maxitt, eps, epsd, epsp, solver)
 warning("off", "all");
+tic;
 Q = problem.Q;
 q = problem.q;
 
@@ -98,14 +99,24 @@ while true
     J = [M, A';A, zeros(k, k)];
     r = -[ gradL - diag(1./x)*(sigma*mu*ones(n,1)) + lambda_s ;A*x-b];
     
-    tol = 1e-15;
+    tol = 1e-14;
     maxit = size(J);
     maxit = maxit(1);
     
     
-    [d, tmp] = gmres(J, r, [], tol, maxit);
-    %d = linsolve(J, r);
+    %[d, tmp] = gmres(J, r, [], tol, maxit);
+    %[d, ttt] = minres(J, r, tol, maxit);
     
+     
+    if solver=="minres"
+        [d, tmp] = minres(J, r, tol, maxit);
+    end
+    if solver=="gmres"
+        [d, tmp] = gmres(J, r, [], tol, maxit);
+    end
+    if solver=="ldl"
+        d = J\r;
+    end
     
     dx    = d(1:n);
     dl_eq = d(n+1:k+n);
@@ -137,4 +148,6 @@ while true
  %       exit_code = -2;
  %       break
  %   end
+end
+time = toc;
 end
