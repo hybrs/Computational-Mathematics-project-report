@@ -1,6 +1,6 @@
-function [x, fval, lambda, exit_code, time] =  PDIP(problem, maxitt, eps, epsd, epsp, solver)
+function [x, fval, lambda, exit_code, time, it, gaps, residuals] =  PDIP(problem, maxitt, eps, epsd, epsp, solver)
 warning("off", "all");
-tic;
+
 Q = problem.Q;
 q = problem.q;
 
@@ -13,6 +13,7 @@ b = problem.b;
 k = size(A);
 k = k(1);
 
+tic;
 %init the starting point (x0, lambda_eq0, lambda_s0)
 [x0, lambda] = feasible_sp(A, Q, q);
 lambda_eq = lambda.eqlin;
@@ -23,7 +24,7 @@ mu = (x0'*lambda_s)/n;
 sigma = 0.3;
 
 fprintf( 'Primal-Dual Interior Point method\n');
-fprintf( 'iter\t\tgap\t\tdualf\tprimalf\tsTx\n' );
+fprintf( 'iter\t\tfval\tgap\t\tdualf\tprimalf\tsTx\n' );
 fprintf('-------------------------------------\n');
 
 x = x0;
@@ -31,6 +32,7 @@ it = 0;
 gap = inf;
 rd = inf;
 
+gaps = []; residuals = struct('rd', [], 'rp', []);
 
 while true
     it=it+1;
@@ -51,10 +53,14 @@ while true
     rp = norm(A*x - b, 2);
     rxs = norm(lambda_s'*x, 2);
     
-    fprintf( '%4d\t\t%1.3e\t\t%1.3e\t%1.3e\t%1.3e\n' , it , gap, rd, rp, rxs);
+    gaps = [gaps; gap]; 
+    residuals.rd = [residuals.rd; rd]; 
+    residuals.rp = [residuals.rp; rp];
+    
+    fprintf( '%4d\t\t%1.3e\t%1.3e\t\t%1.3e\t%1.3e\t%1.3e\n' , it , fval, gap, rd, rp, rxs);
     
     if it == maxitt
-        fprintf( 'iter\t\tgap\t\tdualf\tprimalf\tsTx\n\n' );
+        fprintf( 'iter\t\tfval\tgap\t\tdualf\tprimalf\tsTx\n\n' );
         fprintf( 'Execution terminated because reached iteration limit\n');
         lambda.lower = lambda_s;
         lambda.eqlin = lambda_eq;

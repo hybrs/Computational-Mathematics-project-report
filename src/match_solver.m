@@ -4,31 +4,40 @@ function [sol] = match_solver(p, solver)
 
     n = p.n;
 
-    if solver == 1
-        solver = 'ldl';
-        [x, fval, lambda, exit_code, time] =  PDIP(p, maxit, eps, epsd, epsp, solver);
+    if solver == "quadprog"
+        %opts = optimoptions(@quadprog,'Display', 'iter-detailed','Algorithm', 'interior-point-convex');
+        opts = optimoptions(@quadprog,'Algorithm', 'interior-point-convex');
+        tic;
+        [x, fval, exit_code, out, lambda] = quadprog(2*p.Q, p.q, [], [], p.A, p.b, zeros(n,1), [],[], opts);
+        its = out.iterations;
+        time = toc;
+        
+        grad = norm(2*p.Q*x + p.q +p.A'*lambda.eqlin - lambda.lower, 2);
+        primal = x'*p.Q*x + p.q'*x;
+        dual = - lambda.eqlin' * p.b - x'*p.Q*x ;
+        gap = ( primal - dual ) / max( abs( primal ) , 1 );
+        rp = norm(p.A*x-p.b, 2);
+        gaps = [gap];
+        res = struct('rd', [norm(grad, 2)], 'rp', [rp]);
+        
     else
-        if solver == 2
-            solver = 'gmres';
-            [x, fval, lambda, exit_code, time] =  PDIP(p, maxit, eps, epsd, epsp, solver);
-        else
-            if solver == 3
-                solver = 'minres';
-                [x, fval, lambda, exit_code, time] =  PDIP(p, maxit, eps, epsd, epsp, solver);
-            else
-                solver = 'quadprog';
-                opts = optimoptions(@quadprog,'Algorithm','interior-point-convex');
-                tic;
-                [x, fval, exit_code, out, lambda] = quadprog(2*p.Q, p.q, [], [], p.A, p.b, zeros(n,1), [],[], opts);
-                time = toc;
+        [x, fval, lambda, exit_code, time, its, gaps, res] =  PDIP(p, maxit, eps, epsd, epsp, solver);
+    end
+    
+    
+    
+    if solver == "ldl"
+        solver = 1;
+    else if solver == "gmres"
+            solver = 2;
+        else if solver == "minres"
+                solver = 3;
+            else 
+            solver = 4;
             end
         end
-    end
-    grad = 2*p.Q*x + p.q +p.A'*lambda.eqlin - lambda.lower;
-    primal = x'*p.Q*x + p.q'*x;
-    dual = - lambda.eqlin' * p.b - x'*p.Q*x ;
-    gap = ( primal - dual ) / max( abs( primal ) , 1 );
-    rp_vec =p.A*x-p.b;
+   end    
+ 
     
-    sol = struct('x',x, 'fval', fval, 'exit_code', exit_code, 'lambda',lambda, 'solver', solver, 'time', time, 'n', p.n, 'm', p.m, 'density',p.density, 'gap', gap, 'rd', grad, 'rp', rp_vec);
+    sol = struct('x',x, 'fval', fval, 'exit_code', exit_code, 'lambda',lambda, 'solver', solver, 'time', time, 'n', p.n, 'm', p.m, 'density',p.density, 'gap', gaps, 'res', res, 'iterations', its);
 end

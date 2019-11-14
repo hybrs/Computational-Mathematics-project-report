@@ -1,12 +1,10 @@
 function [problem] = genProblem(n,m, density)
 
-a = 0;
+a = -1e-6;
 b = 1;
-r = (b-a).*rand(n,1) + a;
+eigs = (b-a).*rand(n,1) + a;
 
-r(r<0) = 0;
-
-eigs = r;
+eigs(eigs<0) = 0;
 
 [Q,q]=genQF(n, density, eigs);
 [A] = generateAdisjointed(m,n);
