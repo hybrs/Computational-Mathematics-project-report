@@ -21,7 +21,7 @@ Da $P$ e $D$ si ricava quindi il sistema KKT \ref{eq:pkkt2} associato e una misu
 \State $\mu^0 \gets (x^0^\intercal \lambda_s^0)/n$
 \State $\sigma \in [0,1]$
 \State $k \gets 0$
-\BState \textbf{while} \emph{!stoppingCriteria()}:
+\BState \textbf{while} \emph{k<maxit \& complementary\_gap < eps}
 \State $\mu^{k+1} \gets \sigma \mu^{k}  $
 
 \State \textit{risolvere} \;$
@@ -30,7 +30,7 @@ Da $P$ e $D$ si ricava quindi il sistema KKT \ref{eq:pkkt2} associato e una misu
 A & 0 \\
 \end{bmatrix}\begin{bmatrix}\Delta x^{k+1} \\ \Delta \lambda_{eq}^{k+1}\end{bmatrix}= -
 \begin{bmatrix}
-    r_d-X^{-1}\mu^{k+1} e\\r_p
+    r_d-X^{-1}\mu^{k+1} e + \lambda_s\\r_p
 \end{bmatrix}
 $
 
@@ -52,10 +52,24 @@ $
 Nell'algoritmo sopra descritto sono cruciali la scelta della tripla iniziale (riga 2) e la scelta di $\alpha$ (riga 10); nelle sezioni seguenti descriveremo le nostre scelte progettuali a riguardo.
 Le condizioni di stop scelte (riga 6) sono descritte in \ref{cap:stop}.
 
-Mentre il sistema della riga 8 verrà risolto con il metodo GMRES presente in \texttt{MATLAB}, del quale discuteremo brevemente nella sezione \ref{cap:GMRES}.
+Mentre per la risoluzione della riga 8 utilizzeremo sia un approccio iterativo (GMRES) che diretto (versione modificata di LDL).
+Entrambi i metodi verranno presentati nella sezione \ref{cap:RISLS}.
+\newpage
+\subsection{Punto inziale}\label{cap:sp}
+Il nostro obiettivo è trovare una tripla iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$ che sia ammissibile per $P$ e $D$
 
-\subsection{Inizializzazione variabili}
-Poichè il nostro algoritmo amette come punto iniziale un punto che soddisfi solo \ref{eq:nonneg}, scegliamo di inizializzare la tripla $(x^0, \lambda_{eq}^0, \lambda_s^0)$ con valori positivi, casuali e dell'ordine di $10^{-1}$. 
+\subsubsection*{Scelta $x^0$}
+Per la scelta di $x^0$ sfruttiamo la struttura della matrice dei vincoli $A$; ogni $x_i$ appare in un solo vincolo ed il vincolo è definito come in \ref{eq:vincoli}, quindi: $$x_i=\frac{1}{|I^h|}$$
+dove $I^h$ è l'insieme di indici, ovvero il simplesso, che contiene l'indice $i$.
+
+\subsubsection*{Scelta $\lambda^0_{eq}$ e $\lambda^0_{s}$}
+Inizializziamo $\lambda^0_{eq}$ con numeri positivi $\in (0,1)$; mentre per garantire l'ammissibilità duale troviamo $\lambda^0_s$ risolvendo 
+$\nabla _x L(x^0, \lambda_{eq}^0, \lambda_s^0) = 0$.
+$$\overline{\lambda_s} = 2Qx^0+q+A^\intercal\lambda_{eq}^0$$
+Nel vettore $\lambda_s^0$ potrebbero essere presenti componenti negative, quindi definiamo $\Delta_s$ come:
+$$\Delta_s = -(3/2)\;max(0, \underset{i}{min\;}\overline{\lambda_s}_i)$$
+a questo punto scriviamo $\lambda_s^0 = \overline{\lambda_s} + e \Delta_s$ con 
+
 
 \subsection{Scelta dello step-size $\alpha$}
 Scegliamo di utilizzare uno step-size distinto per ogni vettore della tripla $(x, \lambda_{eq}, \lambda_s)$.
@@ -72,25 +86,30 @@ E quindi scegliamo lo step $\alpha$ come segue:
 
 
 \subsection{Criteri di stop}\label{cap:stop}
-L'algoritmo può terminare sia perchè è stato raggiunto il numero massimo di iterazioni deciso dall'utente, oppure perchè le seguenti condizioni vengono soddisfatte contemporaneamente.
+L'algoritmo può terminare sia perchè è stato raggiunto il numero massimo di iterazioni deciso dall'utente, oppure perchè il \textit{complementary gap} è minore di $\epsilon$.
 
-\begin{subequations}
-\begin{equation}
-\|\nabla _x L(x, \lambda_{eq}, \lambda_s)\|_2 \leq \epsilon_{d}
-\end{equation}
-\begin{equation}
-   \| Ax - b\|_2 \leq \epsilon_{p}
-\end{equation}
-\begin{equation}
-    \|XSe\|_2 \leq \epsilon_{s}
-\end{equation}
-\end{subequations}
+%\begin{subequations}
+%\begin{equation}
+%\|\nabla _x L(x, \lambda_{eq}, %\lambda_s)\|_2 \leq \epsilon_{d}
+%\end{equation}
+%\begin{equation}
+%   \| Ax - b\|_2 \leq \epsilon_{p}
+%\end{equation}
+%\begin{equation}
+%    \|XSe\|_2 \leq \epsilon_{s}
+%\end{equation}
+%\end{subequations}
 
-\subsection{GMRES}\label{cap:GMRES}
+
+\subsection{Risoluzione del sistema lineare}\label{cap:RISLS}
+Per la risoluzione del sistema in \ref{eq:pkkt2} abbiamo deciso di utilizzare e confrontare due diversi approcci; uno iterativo (GMRES) e l'altro diretto (LDL).
+
 GMRES è un metodo iterativo per la soluzioni di sistemi lineari $Ax=b$ non simmetrici di grandi dimensioni.
 La soluzione esatta del sistema è $x_\ast = A^{-1}b$.
 L'idea del metodo GMRES è di approssimare la soluzione $x_\ast$ al passo $n$ con un vettore $x_n \in K_n$, dove $K_n$ è il Krylov subspace $\langle b, Ab,\dots,A^{n-1}b\rangle$, che minimizza la norma del residuo $r_n = b - Ax_n$.
 Questo si traduce in determinare $x_n$ risolvendo un least squares problem.
+
+Mentre per la risoluzione diretta del sistema, usiamo una versione modificata di LDL per matrici simmetriche, implementata da \texttt{MATLAB} attraverso l'operatore \textit{mldivide}.
 
 
 \subsection{Convergenza del metodo}\label{cap:Convergenza}

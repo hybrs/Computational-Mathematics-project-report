@@ -1,0 +1,33 @@
+\section{Codice prodotto e validazione}
+In questa sezione descriviamo il codice che implementa il metodo PDIP, la generazione delle istanze dei problemi e gli esperimenti.
+
+\subsection{Codice \texttt{MATLAB}}
+La nostra soluzione è composta da cinque files:
+
+\begin{itemize}
+    \item \texttt{genProblem.m} script che genera un'instanza del problema $(Q,q,A,b)$ usando funzioni ausiliare definite negli altri script.
+    \item \texttt{genQF.m} script che dati dimensione $n$, $\delta \in (0,1]$ e un vettore $v\geq0$ genera un vettore $q\in\mathbb{R}^n$ ed una matrice $Q \in \mathbb{R}^{n \times n}$ con densità $\delta$ e autovalori $v$.
+    Per generare $Q$ con queste proprietà è stata utilizzata la funzione \texttt{MATLAB} \texttt{sprandsym}.
+    
+   \item \texttt{generateAdisjointed.m} script che genera la matrice dei vincoli $A$ dato il numero di simplessi $m$ e il numero di variabili $n$.
+    %Per garantire che $rank(A)=m$ e che ogni simplesso contenga almeno due vertici la matrice $A$ viene generata come segue:
+    \item \texttt{feasible\_sp.m} script che dati $Q, \;q$ ed $A$ calcola il punto iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$ come mostrato in \ref{cap:sp}.
+    
+    \item \texttt{PDIP.m} script che implementa il metodo primale duale del punto interno come in alg. \ref{alg:pseudo}.
+    
+\end{itemize}
+
+
+\subsection{Esperimenti}
+Allo scopo di testare l'implementazione proposta sono stati effettuati esperimenti considerando PDIP sia con risoluzione iterativa che diretta del sistema lineare.
+Inoltre tempi ed accuratezza del metodo da noi implementato sono stati confrontati con la funzione \textit{built-in} di \texttt{MATLAB} \texttt{quadprog}.
+Gli esperimenti possono essere divisi in tre gruppi:
+\begin{itemize}
+    \item Nel primo insieme di esperimenti abbiamo voluto testare la scalabilità del nostro metodo fissando $m$ e densità al variare di $n$.
+    \item Nel secondo gruppo di esperimenti abbiamo voluto investigare l'effetto del numero dei vincoli sulla convergenza.
+    Abbiamo fatto variare $m$ lasciando fisse $n$ e densità.
+    \item infine, nel terzo gruppo di esperimenti abbiamo investigato gli effetti della densità della matrice $Q$ fissati $m$ ed $n$.
+\end{itemize}
+
+Per ogni esperimento sono state effettuate 20 ripetizioni per poi calcolare media e deviazione standard delle metriche.
+Tali esperimenti sono stati eseguiti su un Laptop con processore \textit{Intel(R) Core(TM) i5-3337U CPU @ 1.80GHz (4 CPUs)} e 6 GB di RAM. 
