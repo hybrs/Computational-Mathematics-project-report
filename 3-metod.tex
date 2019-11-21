@@ -18,7 +18,7 @@ Da $P$ e $D$ si ricava quindi il sistema KKT \ref{eq:pkkt2} associato e una misu
 \begin{algorithmic}[1]
 \Function{PDIP}{Q, q, A, b, eps, maxit}
 \State \textit{inizializzare} $(x^0, \lambda_{eq}^0, \lambda_s^0) > 0$ 
-\State $\mu^0 \gets (x^0^\intercal \lambda_s^0)/n$
+\State $\mu^0 \gets (x^{0\intercal} \lambda_s^0)/n$
 \State $\sigma \in [0,1]$
 \State $k \gets 0$
 \BState \textbf{while} \emph{k<maxit \& complementary\_gap < eps}
@@ -54,21 +54,33 @@ Le condizioni di stop scelte (riga 6) sono descritte in \ref{cap:stop}.
 
 Mentre per la risoluzione della riga 8 utilizzeremo sia un approccio iterativo (GMRES) che diretto (versione modificata di LDL).
 Entrambi i metodi verranno presentati nella sezione \ref{cap:RISLS}.
-\newpage
+
 \subsection{Punto inziale}\label{cap:sp}
 Il nostro obiettivo è trovare una tripla iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$ che sia ammissibile per $P$ e $D$
 
 \subsubsection*{Scelta $x^0$}
-Per la scelta di $x^0$ sfruttiamo la struttura della matrice dei vincoli $A$; ogni $x_i$ appare in un solo vincolo ed il vincolo è definito come in \ref{eq:vincoli}, quindi: $$x_i=\frac{1}{|I^h|}$$
+Per la scelta di $x^0$ sfruttiamo la struttura della matrice dei vincoli $A$; ogni $x_i$ appare in un solo vincolo ed il vincolo è definito come in \ref{eq:vincoli}, quindi: 
+
+\begin{equation}\label{eq:startx}
+  x_i=\frac{1}{|I^h|}  
+\end{equation}
 dove $I^h$ è l'insieme di indici, ovvero il simplesso, che contiene l'indice $i$.
 
 \subsubsection*{Scelta $\lambda^0_{eq}$ e $\lambda^0_{s}$}
 Inizializziamo $\lambda^0_{eq}$ con numeri positivi $\in (0,1)$; mentre per garantire l'ammissibilità duale troviamo $\lambda^0_s$ risolvendo 
 $\nabla _x L(x^0, \lambda_{eq}^0, \lambda_s^0) = 0$.
-$$\overline{\lambda_s} = 2Qx^0+q+A^\intercal\lambda_{eq}^0$$
+
+\begin{equation}\label{eq:startl}
+\overline{\lambda_s} = 2Qx^0+q+A^\intercal\lambda_{eq}^0
+\end{equation}
+
 Nel vettore $\lambda_s^0$ potrebbero essere presenti componenti negative, quindi definiamo $\Delta_s$ come:
-$$\Delta_s = -(3/2)\;max(0, \underset{i}{min\;}\overline{\lambda_s}_i)$$
-a questo punto scriviamo $\lambda_s^0 = \overline{\lambda_s} + e \Delta_s$ con 
+
+\begin{equation}\label{eq:startdl}
+\Delta_s = -(3/2)\;max(0, \underset{i}{min\;}\overline{\lambda_s}_i)
+\end{equation}
+
+a questo punto scriviamo $\lambda_s^0 = \overline{\lambda_s} + e \Delta_s$. 
 
 
 \subsection{Scelta dello step-size $\alpha$}
@@ -118,3 +130,4 @@ I risultati teorici sulla convergenza dei metodi DPIP \cite{Nocedal2006Numerical
 
 Il nostro metodo è di tipo \textit{infeasible}, 
 ovvero ammette un punto iniziale che non soddisfi i vincoli in $P$ e $D$, ma data la scelta di uno step size diverso per il problema primale e duale, e l'aggiunta del centering parameter - scelte che in pratica aumentano la velocità di convergenza - ci aspettiamo che il nostro metodo converga comunque in un numero di iterazioni di $\approx 100$, per $n \rightarrow \infty$, come empiricamente osservato sui metodi di questa classe.
+

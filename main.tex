@@ -14,7 +14,7 @@
 \usepackage{fancyvrb}
 \usepackage{geometry}
 \usepackage{verbatim}
-\geometry{left=2.5cm, right=2.5cm, top=3cm, bottom=3cm}
+\geometry{left=2cm, right=2cm, top=2.5cm, bottom=2.5cm}
 \usepackage{listings}
 \usepackage{cancel}
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
@@ -60,6 +60,8 @@
 \setlength{\headheight}{13.6pt} % Customize the height of the header
 
 \newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
 
 \numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
 \numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
@@ -105,8 +107,7 @@ Computational Mathematics for Learning\\and Data Analysis project report\\
 \input{3-metod.tex}
 \input{4-codeVal.tex}
 \input{5-results.tex}
-
-%\input{concl.tex}
+\input{concl.tex}
 \newpage
 \bibliographystyle{plain}
 \bibliography{references}
