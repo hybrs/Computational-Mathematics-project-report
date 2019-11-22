@@ -20,15 +20,36 @@ La nostra soluzione è composta da cinque files:
 
 
 \subsection{Esperimenti}
-Allo scopo di testare l'implementazione proposta sono stati effettuati esperimenti considerando PDIP sia con risoluzione iterativa che diretta del sistema lineare.
-Inoltre tempi ed accuratezza del metodo da noi implementato sono stati confrontati con la funzione \textit{built-in} di \texttt{MATLAB} \texttt{quadprog}.
-Gli esperimenti possono essere divisi in tre gruppi:
+Allo scopo di testare l'implementazione proposta sono stati effettuati esperimenti considerando PDIP sia con risoluzione iterativa (\emph{PDIP-GMRES}) che diretta (\textit{PDIP-LDL}) del sistema lineare.
+Inoltre tempi ed accuratezza del metodo da noi implementato sono stati confrontati con quegli della funzione \textit{built-in} di \texttt{MATLAB} \texttt{quadprog}.
+
+I parametri coinvolti nella nostra analisi sono:
 \begin{itemize}
-    \item Nel primo insieme di esperimenti abbiamo voluto testare la scalabilità del nostro metodo fissando $m$ e densità al variare di $n$.
-    \item Nel secondo gruppo di esperimenti abbiamo voluto investigare l'effetto del numero dei vincoli sulla convergenza.
-    Abbiamo fatto variare $m$ lasciando fisse $n$ e densità.
-    \item infine, nel terzo gruppo di esperimenti abbiamo investigato gli effetti della densità della matrice $Q$ fissati $m$ ed $n$.
+    \item dimensione dell'input $n$, ovvero la dimensione della matrice $Q$;
+    \item numero di vincoli $m$, (anche espresso in percentuale rispetto ad $n$); abbiamo anche che $m = rank(A) = |I| \leq n/2$;
+    \item densità $\delta$ della matrice $Q$: la percentuale di elementi non-nulli in $Q$.
 \end{itemize}
+\newpage
+Gli esperimenti possono essere divisi in quattro gruppi:
+\begin{enumerate}
+    \item nel primo insieme di esperimenti abbiamo voluto testare la scalabilità del nostro metodo fissando $m$ e densità al variare di $n$
+    \item nel secondo gruppo di esperimenti abbiamo voluto investigare l'effetto del numero dei vincoli sul tempo di convergenza; abbiamo fatto variare $m$ lasciando fisse $n$ e densità.
+    \item nel terzo gruppo di esperimenti abbiamo investigato gli effetti della densità della matrice $Q$ fissati $m$ ed $n$
+    \item infine il quarto tipo di esperimenti è mirato a valutare sia la convergenza dell'implementazione proposta, che l'accuratezza della soluzione trovata; quindi, fissati $n, \; m$ e $\delta$, analizziamo l'andamento del gap e la differnza fra le soluzioni del nostro metodo e \texttt{quadprog}
+\end{enumerate}
+
+La Tabella \ref{tab:param} riassume i valori assegnati ai parametri durante gli esperimenti.
+\begin{table}[!h]
+\centering
+\begin{tabular}{c|c|c|c}
+\textbf{Esperimento}                & \textbf{$\mathbf{n}$}                                         & \textbf{$\mathbf{m}$}                 & \textbf{$\mathbf{\delta}$}     \\ \hline
+\textbf{Scalabilità}                &  \begin{tabular}[c]{@{}c@{}}$[50, 75, 100, 200, 300, \dots\; , \\ 1000, 1250, 1500, 1750, 2000]$\end{tabular}                    & $40\%$ & $40\%$                        \\ \hline
+\textbf{N° Vincoli}                 & $1000$                                                        & $[5\%, 10\%, 20\%, 30\%, 40\%, 50\%]$ & $40\%$                         \\ \hline
+\textbf{Densità}                    & $1000$                                                        & $20\%$                                & $[10\%, 20\%, \dots\;, 100\%]$ \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}Convergenza \&\\  Accuratezza\end{tabular}} & $1000$                                                        & $20\%$                                & $40\%$                        
+\end{tabular}
+\caption{Tabella che riassume i parametri coinvolti negli esperimenti.\label{tab:param}}
+\end{table}
 
 Per ogni esperimento sono state effettuate 20 ripetizioni per poi calcolare media e deviazione standard delle metriche.
-Tali esperimenti sono stati eseguiti su un Laptop con processore \textit{Intel(R) Core(TM) i5-3337U CPU @ 1.80GHz (4 CPUs)} e 6 GB di RAM. 
+Tali esperimenti sono stati eseguiti su un Laptop con processore \texttt{Intel(R) Core(TM) i5-3337U CPU @ 1.80GHz (4 CPUs)} e 6 GB di RAM. 

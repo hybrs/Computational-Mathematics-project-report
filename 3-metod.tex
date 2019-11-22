@@ -126,7 +126,7 @@ Mentre per la risoluzione diretta del sistema, usiamo una versione modificata di
 
 \subsection{Convergenza del metodo}\label{cap:Convergenza}
 
-I risultati teorici sulla convergenza dei metodi DPIP \cite{Nocedal2006Numerical} dimostrano che effettuando scelte appropriate sulla tripla iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$, per $\epsilon > 0$ fissato, il limite superiore al numero delle iterazioni per garantire la convergenza dell'algoritmo è $log(n\; log(1/\epsilon))$ dove $n$ è l'input size del problema.
+I risultati teorici sulla convergenza dei metodi PDIP \cite{Nocedal2006Numerical} dimostrano che effettuando scelte appropriate sulla tripla iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$, per $\epsilon > 0$ fissato, il limite superiore al numero delle iterazioni per garantire la convergenza dell'algoritmo è $log(n\; log(1/\epsilon))$ dove $n$ è l'input size del problema.
 
 Il nostro metodo è di tipo \textit{infeasible}, 
 ovvero ammette un punto iniziale che non soddisfi i vincoli in $P$ e $D$, ma data la scelta di uno step size diverso per il problema primale e duale, e l'aggiunta del centering parameter - scelte che in pratica aumentano la velocità di convergenza - ci aspettiamo che il nostro metodo converga comunque in un numero di iterazioni di $\approx 100$, per $n \rightarrow \infty$, come empiricamente osservato sui metodi di questa classe.
