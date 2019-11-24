@@ -182,5 +182,5 @@ while true
     mu = sigma*(x'*lambda_s)/n;
 end
 time = toc;
-fprintf( 'Primal-Dual Interior Point method terminated in %d iterations, elapsed time is %1.3e\nfval = %1.3e and complementary gap = %1.3e\n', it, time, fval, gap);
+fprintf( 'Primal-Dual Interior Point method terminated in %d iterations, elapsed time is %1.3e seconds\nfval = %1.3e and complementary gap = %1.3e\n', it, time, fval, gap);
 end
