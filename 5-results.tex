@@ -12,8 +12,8 @@ La tabella \ref{tab:struct} descrive i campi della generica struttura.
 \begin{table}[!h]
 \centering
 \begin{tabular}{r|l}
-\textbf{experiment} & Stringa che identifica il sotto-esperimento.                                                                                                                                                                                             \\\hline
-\textbf{method }    & Stringa che specifica quale dei tre metodi è stato utilizzato.                                                                                                                                                                            \\\hline
+\textbf{experiment} & \textit{Stringa che identifica il sotto-esperimento.       }                                                                                                                                                                                      \\\hline
+\textbf{method }    & \textit{Stringa che specifica quale dei tre metodi è stato utilizzato.                                                                                       }                                                                                     \\\hline
 \textbf{times}      & \begin{tabular}[c]{@{}l@{}}\textit{Matrice di dimensione} $|parameters|\times nrepeat$ \\ \textit{che contiene i tempi di esecuzione del metodo per ogni}\\ \textit{valore }$\in$\textit{parameters e per ognuna delle }$nrepat$ \\ \textit{ripetizioni dell'esperimento}.\end{tabular}   \\\hline
 \textbf{iterations} & \begin{tabular}[c]{@{}l@{}}\textit{Matrice di dimensione }$|parameters|\times nrepeat$ \\\textit{ che contiene il numero di iterazioni del metodo per ogni}\\ \textit{valore } $\in$ \textit{parameters e per ognuna delle }$nrepat$\\ \textit{ripetizioni dell'esperimento.}\end{tabular} \\\hline
 \textbf{parameters} & \begin{tabular}[c]{@{}l@{}}\textit{Vettore che contiene i valori che verranno assunti dal parametro}\\ \textit{preso in esame nel sotto-esperimento corrente}.\end{tabular}                                                                               
@@ -88,7 +88,7 @@ In particolare:
     \caption{Tabella contenente la deviazione standard dei tempi di esecuzione di PDIP-LDL e QUADPROG relativi al primo sotto-esperimento. \label{tab:ldlqp1.1}}
 \end{table}
 
-La Tab. \ref{tab:ldlqp1.1} mostra come i le prestazioni ottenute sono stabili anche in termini di deviazione standard; si nota un leggero aumento di quest'ultima sulle istanze piccole del problema in quanto una piccola variazione incide maggiormente sulla metrica.
+La Tab. \ref{tab:ldlqp1.1} mostra come le prestazioni ottenute sono stabili anche in termini di deviazione standard; si nota un leggero aumento di quest'ultima sulle istanze piccole del problema in quanto una piccola variazione incide maggiormente sulla metrica.
 
 La variazione dell'input-size non sembra invece influire in maniera significativa sul  numero di iterazioni necessarie alla convergenza dei metodi.
 Il grafico in Fig.\ref{fig:exp1.2} mostra infatti come, a prescindere dal valore di $n$, PDIP impieghi circa 21 iterazioni mentre QUADPROG circa 7.
@@ -194,16 +194,16 @@ Il grafico in Fig. \ref{fig:gap} mostra come varia - in scala logaritmica sull'a
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.8\textwidth, height=6.3cm]{img/MU6.png}
+    \includegraphics[width=\textwidth, height = 7.5cm]{img/MU6.png}
     \caption{Andamento del gap (in \textit{log-scale} sull'asse delle y) all'aumentare delle iterazioni. \label{fig:gap}}
 \end{figure}
 
-La seconda parte di questo esperimento ha l'obiettivo di valutare l'accuratezza della soluzione $(x, \lambda_{eq}, \lambda_s)$ dal nostro metodo. A questo proposito confrontiamo le triple restituite da PDIP-GMRES e LDL fra di loro e con quella di QUADPROG. 
+La seconda parte di questo esperimento ha l'obiettivo di valutare l'accuratezza della soluzione $(x, \lambda_{eq}, \lambda_s)$ dal nostro metodo. A questo proposito confrontiamo i residui finali e le triple restituite da PDIP-GMRES e PDIP-LDL fra di loro e con quella di QUADPROG. 
 
-Come metrica di confronto abbiamo scelto di usare la norma della differenza fra i vettori soluzione $\norm{\delta_v}$ :
+Come metrica di confronto per le triple abbiamo scelto di usare la norma della differenza fra i vettori soluzione $\norm{\delta_v}$ :
 
 \begin{equation}\label{ep:acc}
-     \norm{v_{M1} - v_{M2}} \;\;\;\;\;\;\;\;\; \mathrm{con} \;\;\; v\in \{ x, \lambda_{eq}, \lambda_s\} \;\; \mathrm{e} \;\; M_i \in \{{\scriptsize\mathit{PDIP-GMRES},\; \mathit{PDIP-LDL}, \; \mathit{QUADPROG}}\}
+     \norm{v_{M1} - v_{M2}} \;\;\;\;\;\;\;\;\; \mathrm{con} \;\;\; v\in \{ x, \lambda_{eq}, \lambda_s\} \;\; \mathrm{e} \;\; M_i \in \{{\scriptsize\mathit{PDIP-LDL},\; \mathit{PDIP-GMRES}, \; \mathit{QUADPROG}}\}
 \end{equation}
 
 In Tab. \ref{tab:normx} e \ref{tab:norml} sono riportate medie e deviazioni standard - su 20 esecuzioni - delle metriche, calcolate come in \ref{ep:acc}, rispettivamente per i vettori $x$ e $\lambda$.   
@@ -228,4 +228,24 @@ $\mathbf{\norm{\delta x}}$ & \multicolumn{2}{c|}{\textbf{PDIP-GMRES}}         & 
 \caption{Media e deviazione standard, sulle 20 ripetizioni, della norma della differenza fra i moltiplicatori lagrangiani soluzione dei metodi testati.\label{tab:norml}}
 \end{table}
 
-Le soluzioni ottenute dall'esecuzione diretta e iterativa di PDIP risultano pressocchè identiche: sia $\norm{\delta x}$ che $\norm{\delta\lambda}$ sono dell'ordine di $10^{-13}$; ed entrambe queste soluzioni sono uguali a quella trovata da QUADPROG a meno di un fattore di $10^{-3}$. La nostra implementazione può essere quindi considerata stabile e accurata rispetto alla built-in di \texttt{MATLAB}.
+\begin{table}[!h]
+\centering
+\begin{tabular}{c|c|c}
+\textbf{}           & $\mathbf{\norm{r_p}}$ & $\mathbf{\norm{r_d}}$ \\\hline
+\textbf{PDIP-LDL} &      $1.1741\cdot10^{-15} \pm8.9\%$                 &           $1.3726\cdot10^{-14} \pm11.4\%$             \\\hline
+\textbf{PDIP-GMRES}   &        $9.0965\cdot10^{-14} \pm13.3\%$               &            $1.1016\cdot10^{-12} \pm5.3\%$           \\\hline
+\textbf{QUADPROG}   &      $9.8679\cdot10^{-16} \pm0\%$                &            $9.3234\cdot10^{-15} \pm0.1\%$   \\    
+\end{tabular}
+\caption{Tabella che riporta la media e deviazione standard su 20 esecuzioni della norma dei residui primali e duali finali dei tre metodi in analisi.}
+\label{tab:res}
+\end{table}
+
+Le soluzioni ottenute dall'esecuzione diretta e iterativa di PDIP risultano pressocchè identiche: sia $\norm{\delta x}$ che $\norm{\delta\lambda}$ sono dell'ordine di $10^{-13}$; ed entrambe queste soluzioni sono uguali a quella trovata da QUADPROG a meno di un fattore di $10^{-3}$.
+
+La Tabella \ref{tab:res} conferma ulteriormente la precisione della nostra implementazione: 
+\begin{itemize}
+    \item l'accuratezza raggiunta è paragonabile a quella di QUADPROG infatti sia il residuo primale, che duale sono maggiori di circa un ordine di grandezza rispetto alla built-in di \texttt{MATLAB}; probabilmente il nostro metodo potrebbe raggiungere precisione dello stesso ordine di grandezza di QUADPROG scegliendo una soglia $\eps$ più bassa rispetto a quella usata nei nostri esperimenti ($10^{-14}$), impiegando però più iterazioni e risultando più lento
+    \item durante tutta la fase sperimentale abbiamo osservato deviazioni standard più alte per la nostra implementazione. Questo fenomeno può essere spiegato dalla presenza di una parte randomica nel nostro metodo, precisamente in \ref{eq:startl} durante la generazione della tripla iniziale: $\lambda_{eq}$ viene inizializzato con reali casuali, influenzando anche l'inizializzazione di $\lambda_s$; QUADPROG invece inizializza sempre $(x^0, \lambda_{eq}^0, \lambda_s^0) = 1$, con risultati finali di conseguenza più simili fra loro.
+\end{itemize}
+
+Concludendo la nostra implementazione, sia in versione diretta, che iterativa, può essere quindi considerata stabile e accurata rispetto alla built-in di \texttt{MATLAB} sia in termini di tempi ed iterazioni di convergenza, che di precisione del risultato finale.

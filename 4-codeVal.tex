@@ -50,11 +50,11 @@ fval = -6.565e+01 and complementary gap = 6.927e-15}
 \end{center}
 \subsection{Esperimenti}
 Allo scopo di testare l'implementazione proposta sono stati effettuati esperimenti considerando PDIP sia con risoluzione iterativa (\emph{PDIP-GMRES}) che diretta (\textit{PDIP-LDL}) del sistema lineare.
-Inoltre tempi ed accuratezza del metodo da noi implementato sono stati confrontati con quegli della funzione \textit{built-in} di \texttt{MATLAB} \texttt{quadprog}.
+Inoltre tempi ed accuratezza del metodo da noi implementato sono stati confrontati con quelli della funzione \textit{built-in} di \texttt{MATLAB} \texttt{quadprog}.
 
 I parametri coinvolti nella nostra analisi sono:
 \begin{itemize}
-    \item dimensione dell'input $n$, ovvero la dimensione della matrice $Q$;
+    \item dimensione dell'input $n$;
     \item $m$, percentuale rispetto ad $n$ di vincoli; abbiamo anche che $k=m\cdot n = rank(A) = |I| \leq n/2$;
     \item densità $\delta$ della matrice $Q$: la percentuale di elementi non-nulli in $Q$.
 \end{itemize}
@@ -63,7 +63,7 @@ Gli esperimenti possono essere divisi in quattro gruppi:
 \begin{enumerate}
     \item nel primo insieme di esperimenti abbiamo voluto testare la scalabilità del nostro metodo fissando $m$ e densità al variare di $n$
     \item nel secondo gruppo di esperimenti abbiamo voluto investigare l'effetto del numero dei vincoli sul tempo di convergenza; abbiamo fatto variare $m$ lasciando fisse $n$ e densità.
-    \item nel terzo gruppo di esperimenti abbiamo investigato gli effetti della densità della matrice $Q$ fissati $m$ ed $n$
+    \item nel terzo gruppo di esperimenti abbiamo investigato gli effetti di $\delta$ fissati $m$ ed $n$
     \item infine il quarto tipo di esperimenti è mirato a valutare sia la convergenza dell'implementazione proposta, che l'accuratezza della soluzione trovata; quindi, fissati $n, \; m$ e $\delta$, analizziamo l'andamento del gap e la differnza fra le soluzioni del nostro metodo e \texttt{quadprog}
 \end{enumerate}
 
