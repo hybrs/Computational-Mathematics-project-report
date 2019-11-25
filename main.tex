@@ -93,6 +93,22 @@ Computational Mathematics for Learning\\and Data Analysis project report\\
 \date{} % Today's date or a custom date
 
 \begin{document}
+\lstset{language=Matlab,%
+    %basicstyle=\color{red},
+    breaklines=true,%
+    morekeywords={matlab2tikz},
+    keywordstyle=\color{blue},%
+    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+    identifierstyle=\color{black},%
+    stringstyle=\color{mylilas},
+    commentstyle=\color{mygreen},%
+    showstringspaces=false,%without this there will be a symbol in the places where there is a space
+    numbers=left,%
+    numberstyle={\tiny \color{black}},% size of the numbers
+    numbersep=9pt, % this defines how far the numbers are from the text
+    emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+    %emph=[2]{word1,word2}, emphstyle=[2]{style},    
+}
 %\nocite{*}
 \maketitle
 
@@ -107,7 +123,7 @@ Computational Mathematics for Learning\\and Data Analysis project report\\
 \input{3-metod.tex}
 \input{4-codeVal.tex}
 \input{5-results.tex}
-\input{concl.tex}
+%\input{concl.tex}
 \newpage
 \bibliographystyle{plain}
 \bibliography{references}

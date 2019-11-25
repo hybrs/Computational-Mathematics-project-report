@@ -1,2 +1,13 @@
 \section{Conclusioni}
-sadasds
+riassunto results:
+\begin{itemize}
+    \item la nostra implementazione ha prestazioni, in termini di tempo di esecuzione e numero di iterazioni, che si avvicinano di molto a quelle dell'implementazione built-in di \texttt{MATLAB}
+    \item  in partiolare PDIP-GMRES risulta il più lento, principalmente perchè contiene la risoluzione iterativa dell'\textit{augmented KKT}. 
+    
+    Tuttavia le prestazioni di questo metodo migliorano significamene all'aumentare del numero di vincoli, e quindi di righe, in $A$; questo accade perché la struttura della matrice nel nostro problema induce una diminuzione della densità della matrice stessa, all'aumentare di $m$. E GMRES funziona meglio su matrici sparse.
+    
+    \item LDL ha prestazioni sempre paragonabili a QUADPROG: è più lento in media di un fattore $\approx\times2$, soffre più di QUADPROG l'aumento del numero di vincoli, ma è molto più stabile all'aumentare della densità della matrice $Q$.
+    
+    \item QUADPROG fa circa la metà delle iterazioni rispetto alle nostre implementazioni, a prescindere dai parametri.ì
+
+\end{itemize}

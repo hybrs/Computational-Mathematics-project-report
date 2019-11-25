@@ -56,7 +56,8 @@ Mentre per la risoluzione della riga 8 utilizzeremo sia un approccio iterativo (
 Entrambi i metodi verranno presentati nella sezione \ref{cap:RISLS}.
 
 \subsection{Punto inziale}\label{cap:sp}
-Il nostro obiettivo è trovare una tripla iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$ che sia ammissibile per $P$ e $D$
+Il nostro obiettivo è trovare una tripla iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$ che sia ammissibile per $P$ e $D$.
+Di seguito presentiamo le scelte implementative per inizializzare i vettori della tripla.
 
 \subsubsection*{Scelta $x^0$}
 Per la scelta di $x^0$ sfruttiamo la struttura della matrice dei vincoli $A$; ogni $x_i$ appare in un solo vincolo ed il vincolo è definito come in \ref{eq:vincoli}, quindi: 
@@ -77,7 +78,7 @@ $\nabla _x L(x^0, \lambda_{eq}^0, \lambda_s^0) = 0$.
 Nel vettore $\lambda_s^0$ potrebbero essere presenti componenti negative, quindi definiamo $\Delta_s$ come:
 
 \begin{equation}\label{eq:startdl}
-\Delta_s = -(3/2)\;max(0, \underset{i}{min\;}\overline{\lambda_s}_i)
+\Delta_s = -(3/2)\;max(0, \underset{i}{min\;}\overline{\lambda_{s_i}})
 \end{equation}
 
 a questo punto scriviamo $\lambda_s^0 = \overline{\lambda_s} + e \Delta_s$. 
@@ -98,7 +99,9 @@ E quindi scegliamo lo step $\alpha$ come segue:
 
 
 \subsection{Criteri di stop}\label{cap:stop}
-L'algoritmo può terminare sia perchè è stato raggiunto il numero massimo di iterazioni deciso dall'utente, oppure perchè il \textit{complementary gap} è minore di $\epsilon$.
+L'algoritmo può terminare sia perchè è stato raggiunto il numero massimo di iterazioni, oppure perchè il \textit{complementary gap} è minore di $\epsilon$, ovvero $v(P)-v(D)<\epsilon$.
+Nella nostra analisi queste due soglie sono fissate rispetivvamente a $100$ e $10^{-14}$.
+
 
 %\begin{subequations}
 %\begin{equation}
@@ -119,9 +122,9 @@ Per la risoluzione del sistema in \ref{eq:pkkt2} abbiamo deciso di utilizzare e 
 GMRES è un metodo iterativo per la soluzioni di sistemi lineari $Ax=b$ non simmetrici di grandi dimensioni.
 La soluzione esatta del sistema è $x_\ast = A^{-1}b$.
 L'idea del metodo GMRES è di approssimare la soluzione $x_\ast$ al passo $n$ con un vettore $x_n \in K_n$, dove $K_n$ è il Krylov subspace $\langle b, Ab,\dots,A^{n-1}b\rangle$, che minimizza la norma del residuo $r_n = b - Ax_n$.
-Questo si traduce in determinare $x_n$ risolvendo un least squares problem.
+Questo si traduce in determinare $x_n$ risolvendo un least squares problem \cite{trefethen1997numerical}.
 
-Mentre per la risoluzione diretta del sistema, usiamo una versione modificata di LDL per matrici simmetriche, implementata da \texttt{MATLAB} attraverso l'operatore \textit{mldivide}.
+Mentre per la risoluzione diretta del sistema, usiamo una versione modificata di LDL per matrici simmetriche, implementata da \texttt{MATLAB} dall'operatore \textit{mldivide}.
 
 
 \subsection{Convergenza del metodo}\label{cap:Convergenza}

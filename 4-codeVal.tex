@@ -10,7 +10,7 @@ La nostra soluzione è composta da cinque files:
     \item \texttt{genQF.m} script che dati dimensione $n$, $\delta \in (0,1]$ e un vettore $v\geq0$ genera un vettore $q\in\mathbb{R}^n$ ed una matrice $Q \in \mathbb{R}^{n \times n}$ con densità $\delta$ e autovalori $v$.
     Per generare $Q$ con queste proprietà è stata utilizzata la funzione \texttt{MATLAB} \texttt{sprandsym}.
     
-   \item \texttt{generateAdisjointed.m} script che genera la matrice dei vincoli $A$ dato il numero di simplessi $m$ e il numero di variabili $n$.
+   \item \texttt{generateAdisjointed.m} script che genera la matrice dei vincoli $A$ dato il numero di simplessi $m$ e il numero di variabili $n$; il metodo si assicura che la matrice generata rappresenti un insieme di partizioni di indici disgiunti e che ogni insieme $I^h$ contenga almeno due indici, questo per evitare il soddisfacimento banale di tale vincolo.
     %Per garantire che $rank(A)=m$ e che ogni simplesso contenga almeno due vertici la matrice $A$ viene generata come segue:
     \item \texttt{feasible\_sp.m} script che dati $Q, \;q$ ed $A$ calcola il punto iniziale $(x^0, \lambda_{eq}^0, \lambda_s^0)$ come mostrato in \ref{cap:sp}.
     
@@ -18,7 +18,36 @@ La nostra soluzione è composta da cinque files:
     
 \end{itemize}
 
+Di seguito, in Codice 4.1, riportiamo un esempio di utilizzo dei files appena descritti che risolve un problema come quello in analisi, di dimensione $n=1000$ con $k=200$ vincoli e densità di $Q$ pari a $0.4$, usando LDL come metodo per la risoluzione del sistema KKT.
+\newpage
+\noindent
+\texttt{>> n = 1000; m = 200; delta = 0.4;}\\
+\texttt{>> p = genProblem(n, m, delta);}\\
+\texttt{>> PDIP(p, 100, 1e-14, \virg{ldl});}\\
+\noindent
+\texttt{Primal-Dual Interior Point method}
+\begin{table}[!h]
+\begin{tabular}{ccccccllllllllllllll}
+\texttt{iter}                                              & \texttt{fval}                                                                  & \texttt{gap}                                                                   & \texttt{dualf}                                                                 & \texttt{primalf}              & \texttt{sTx}                  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+\multicolumn{6}{l}{$-----------------------------------------$}                                                                                                                                                                                                                                                                                                         &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+\texttt{1}                                                 & \texttt{1.669e+01}                                                             & \texttt{2.470e+01}                                                             & \texttt{4.274e+01}                                                             & \texttt{7.364e-16}            & \texttt{4.124e+02}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+\texttt{2}                                                 & \texttt{-6.276e+00}                                                            & \texttt{2.969e+01}                                                             & \texttt{3.032e+00}                                                             & \texttt{7.135e-15}            & \texttt{1.863e+02}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+\texttt{3}                                                 & \texttt{-3.370e+01}                                                            & \texttt{2.461e+00}                                                             & \texttt{9.211e+00}                                                             & \texttt{9.905e-15}            & \texttt{8.294e+01}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+\texttt{\begin{tabular}[c]{@{}c@{}}.\\ .\\ .\end{tabular}} &  \multicolumn{1}{l}{\texttt{}} & \multicolumn{1}{l}{\texttt{}} &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+\texttt{21}                                                & \texttt{-6.565e+01}                                                            & \texttt{2.554e-13}                                                             & \texttt{1.201e-12}                                                             & \texttt{1.138e-15}            & \texttt{1.677e-11}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+\texttt{22}                                                & \texttt{-6.565e+01}                                                            & \texttt{4.200e-14}                                                             & \texttt{1.979e-13}                                                             & \texttt{1.196e-15}            & \texttt{2.754e-12}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+\texttt{23}                                                & \texttt{-6.565e+01}                                                            & \texttt{6.927e-15}                                                             & \texttt{3.322e-14}                                                             & \texttt{1.053e-15}            & \texttt{4.522e-13}            &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\end{tabular}
+\end{table}
 
+\noindent
+\texttt{Execution terminated because duality gap reduced under the threshold\\
+Primal-Dual Interior Point method terminated in 23 iterations\\
+elapsed time is 2.3502 seconds\\
+fval = -6.565e+01 and complementary gap = 6.927e-15} 
+\begin{center}
+    {\small\textbf{Codice 4.1:} esempio di esecuzione del codice prodotto.}
+\end{center}
 \subsection{Esperimenti}
 Allo scopo di testare l'implementazione proposta sono stati effettuati esperimenti considerando PDIP sia con risoluzione iterativa (\emph{PDIP-GMRES}) che diretta (\textit{PDIP-LDL}) del sistema lineare.
 Inoltre tempi ed accuratezza del metodo da noi implementato sono stati confrontati con quegli della funzione \textit{built-in} di \texttt{MATLAB} \texttt{quadprog}.
@@ -26,10 +55,10 @@ Inoltre tempi ed accuratezza del metodo da noi implementato sono stati confronta
 I parametri coinvolti nella nostra analisi sono:
 \begin{itemize}
     \item dimensione dell'input $n$, ovvero la dimensione della matrice $Q$;
-    \item numero di vincoli $m$, (anche espresso in percentuale rispetto ad $n$); abbiamo anche che $m = rank(A) = |I| \leq n/2$;
+    \item $m$, percentuale rispetto ad $n$ di vincoli; abbiamo anche che $k=m\cdot n = rank(A) = |I| \leq n/2$;
     \item densità $\delta$ della matrice $Q$: la percentuale di elementi non-nulli in $Q$.
 \end{itemize}
-\newpage
+
 Gli esperimenti possono essere divisi in quattro gruppi:
 \begin{enumerate}
     \item nel primo insieme di esperimenti abbiamo voluto testare la scalabilità del nostro metodo fissando $m$ e densità al variare di $n$
