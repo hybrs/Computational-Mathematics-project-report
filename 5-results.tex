@@ -30,19 +30,19 @@ La tabella \ref{tab:struct} descrive i campi della generica struttura.
     \centering
     \begin{subfigure}[h]{0.5\textwidth}
         \centering
-        \includegraphics[height=4.52cm]{img/MU1.png}
+        \includegraphics[height=4.3cm]{img/MU1.png}
     \caption{Confronto fra i tre metodi con asse delle y in \textit{log-scale}.\label{fig:exp111}}
     \end{subfigure}%
     ~ 
     \begin{subfigure}[h]{0.5\textwidth}
         \centering
-                \includegraphics[height=4.4cm]{img/MU10.png}
+               \includegraphics[height=4.3cm]{img/MU10.png}
     \caption{Confronto fra i tre metodi. \label{fig:exp112}}
     \end{subfigure}
     ~\newline
      \begin{subfigure}[h]{0.8\textwidth}
         \centering
-                \includegraphics[height=6cm]{img/MU11.png}
+                \includegraphics[height=7cm]{img/MU11.png}
     \caption{Grafico di confronto fra PIDP-LDL e QUADPROG. \label{fig:exp113}}
     \end{subfigure}
     \caption{Tempo di esecuzione, in secondi, all'aumentare della dimensione del problema $n$. \label{fig:exp1}}
@@ -55,7 +55,7 @@ In particolare:
 \begin{itemize}
     \item in Fig.\ref{fig:exp112} la curva relativa al metodo PDIP-GMRES cresce con un esponente maggiore rispetto agli altri due metodi, questo a causa della presenza di metodo iterativo al suo interno, ossia GMRES, che all'aumentare di $n$ dovrà approssimare la soluzione di un sistema sempre più grande.
     
-    \item confrontando i due metodi più veloci in Fig.\ref{fig:exp113} e Tab.\ref{tab:ldlqp2} possiamo notare come la nostra implementazione abbia scalabilità paragonabile a quella di QUADRPROG a meno di un fattore $\approx\times1.85$.
+    \item confrontando i due metodi più veloci in Fig.\ref{fig:exp113} e Tab.\ref{tab:ldlqp2} possiamo notare come la nostra implementazione abbia scalabilità paragonabile a quella di QUADRPROG a meno di un fattore $\approx\times2.24$.
 
 \end{itemize}
 
@@ -63,13 +63,13 @@ In particolare:
 \centering
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline \textbf{input size}                  & \textbf{50}  & \textbf{75}  & \textbf{100} & \textbf{200}  & \textbf{300}  & \textbf{400}  & \textbf{500}  & \textbf{600}  \\\hline
-\textbf{PDIP-LDL}                    & 0.0064       & 0.0177       & 0.0211       & 0.0575        & 0.1418        & 0.3251        & 0.5271        & 0.8170        \\
-\textbf{QUADPROG}                    & 0.0069       & 0.0115       & 0.0137       & 0.0334        & 0.0737        & 0.1377        & 0.2590        & 0.4541        \\
-\textbf{slowfactor} & \textbf{0.9259}       & 1.5432       & 1.5422       & 1.7229        & 1.9247        & \textbf{2.3617}        & 2.0351        & 1.7989        \\ \hline
+\textbf{PDIP-LDL}                    & 0.0096       & 0.0177       & 0.0255       & 0.0964        & 0.1913        & 0.4224        & 0.7092        & 1.1048        \\
+\textbf{QUADPROG}                    & 0.0082       & 0.0109       & 0.0136       & 0.0431        & 0.0747        & 0.1366        & 0.2531        & 0.4398        \\
+\textbf{slowfactor} & \textbf{1.1734}       & 1.6271       & 1.8670       & 2.2362        & 2.559547        & \textbf{3.0921}        & 2.8019        & 2.5121        \\ \hline
 \textbf{input size}                  & \textbf{700} & \textbf{800} & \textbf{900} & \textbf{1000} & \textbf{1250} & \textbf{1500} & \textbf{1750} & \textbf{2000} \\\hline
-\textbf{PDIP-LDL}                    & 1.1532       & 1.4939       & 2.0655       & 2.5441        & 4.2911        & 6.8573        & 8.8513        & 11.7768       \\
-\textbf{QUADPROG}                    & 0.6157       & 0.7584       & 1.0631       & 1.3172        & 2.2816        & 3.5041        & 5.3935        & 7.9170        \\
-\textbf{\textit{slowfactor}} & 1.8728       & 1.9697       & 1.9428       & 1.9315        & 1.8808        & 1.9569        & 1.6411        & 1.4875  \\\hline     
+\textbf{PDIP-LDL}                    & 1.5736       & 2.1028       & 2.8189       & 3.5534        & 5.9961        & 9.4543        & 14.0684        & 19.5569       \\
+\textbf{QUADPROG}                    & 0.6135       & 0.7508       & 1.0506       & 1.2995        & 2.2731        & 3.4718        & 5.3564        & 7.8202        \\
+\textbf{\textit{slowfactor}} & 2.5694       & 2.8007       & 2.6831       & 2.7347        & 2.6378        & 2.7231        & 2.6265        & 2.5008  \\\hline     
 \end{tabular}
     \caption{Tabelle contenenti la media dei tempi di esecuzione (s) di PDIP-LDL e QUADPROG relativi al primo sotto-esperimento. \label{tab:ldlqp2}}
     \end{table}
@@ -79,19 +79,19 @@ In particolare:
 \centering
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|}\hline
 \textbf{input size} & \textbf{50}  & \textbf{75}  & \textbf{100} & \textbf{200}  & \textbf{300}  & \textbf{400}  & \textbf{500}  & \textbf{600}  \\\hline
-\textbf{PDIP-LDL}   & 10.65\%      & 29.22\%      & 17.34\%      & 5.81\%        & 8.03\%        & 3.87\%        & 5.03\%        & 1.80\%        \\
-\textbf{QUADPROG}   & 13.35\%      & 25.80\%      & 17.72\%      & 2.55\%        & 3.12\%        & 4.95\%        & 19.12\%       & 7.99\%        \\\hline
+\textbf{PDIP-LDL}   & 19.68\%      & 12.3\%      & 7.51\%      & 22.83\%        & 0.84\%        & 0.82\%        & 0.44\%        & 0.66\%        \\
+\textbf{QUADPROG}   & 18.98\%      & 13.39\%      & 5.35\%      & 19.55\%        & 4.09\%        & 1.8\%        & 5.94\%       & 1.42\%        \\\hline
 \textbf{input size} & \textbf{700} & \textbf{800} & \textbf{900} & \textbf{1000} & \textbf{1250} & \textbf{1500} & \textbf{1750} & \textbf{2000} \\\hline
-\textbf{PDIP-LDL}   & 3.96\%       & 2.74\%       & 1.67\%       & 1.94\%        & 2.27\%        & 1.56\%        & 2.31\%        & 2.41\%        \\
-\textbf{QUADPROG}   & 2.94\%       & 1.37\%       & 1.42\%       & 0.94\%        & 1.13\%        & 0.85\%        & 0.92\%        & 0.83\%     \\  \hline
+\textbf{PDIP-LDL}   & 2.69\%       & 0.4\%       & 0.59\%       & 0.51\%        & 0.44\%        & 0.45\%        & 1\%        & 0.9\%        \\
+\textbf{QUADPROG}   & 1.32\%       & 3.66\%       & 1.2\%       & 0.79\%        & 1.07\%        & 1.26\%        & 4.47\%        & 0.64\%     \\  \hline
 \end{tabular}
     \caption{Tabella contenente la deviazione standard dei tempi di esecuzione di PDIP-LDL e QUADPROG relativi al primo sotto-esperimento. \label{tab:ldlqp1.1}}
 \end{table}
 
-La Tab. \ref{tab:ldlqp1.1} mostra come le prestazioni ottenute sono stabili anche in termini di deviazione standard; si nota un leggero aumento di quest'ultima sulle istanze piccole del problema in quanto una piccola variazione incide maggiormente sulla metrica.
+La Tab. \ref{tab:ldlqp1.1} mostra come le prestazioni ottenute sono stabili anche in termini di deviazione standard; si nota un leggero aumento di quest'ultima sulle istanze piccole del problema in quanto i tempi in gioco sono davvero piccoli e una piccola variazione incide maggiormente sulla metrica.
 
-La variazione dell'input-size non sembra invece influire in maniera significativa sul  numero di iterazioni necessarie alla convergenza dei metodi.
-Il grafico in Fig.\ref{fig:exp1.2} mostra infatti come, a prescindere dal valore di $n$, PDIP impieghi circa 21 iterazioni mentre QUADPROG circa 7.
+L'incremento dell'input-size non sembra invece influire in maniera significativa sul  numero di iterazioni necessarie alla convergenza dei metodi.
+Il grafico in Fig.\ref{fig:exp1.2} mostra infatti come, a prescindere dal valore di $n$, PDIP impieghi circa 20 iterazioni mentre QUADPROG circa 7.
 
 \begin{figure}[!h]
     \centering
@@ -119,20 +119,20 @@ Il grafico in Fig.\ref{fig:exp1.2} mostra infatti come, a prescindere dal valore
     \caption{I grafici mostrano l'andamento del tempo di esecuzione, in secondi, all'aumentare del numero dei vincoli $m$; espresso in percentuale rispetto ad $n$. \label{fig:exp22}}
 \end{figure}
  
-in Fig.\ref{fig:exp2} GMRES impega meno tempo per covergere all'aumentare del numero di vincoli; questo perchè è più efficiente su matrici sparse: poichè il numero di elementi non-nulli in $A$ è sempre $n$, all'aumentare di $m$, la sparsità del sistema aumenta, confermando che le performance di GMRES su sistemi sparsi sono migliori.
+In Fig.\ref{fig:exp2} i tempi di convergenza di PDIP-GMRES migliorano all'aumentare del numero di vincoli; questo perchè GMRES è più efficiente su matrici sparse e poichè il numero di elementi non-nulli in $A$ è sempre $n$, all'aumentare di $m$, la sparsità di $A$ aumenta, come di conseguenza quella del sistema KKT da risolvere.
 
-Confrontando invece PDIP-LDL e QUADPROG in Fig.\ref{fig:exp2.1}, notiamo come l'aumentare del numero di vincoli impatti in modo negativo sulle performance della nostra implementazione, probabilmente a causa dell'aumento della dimensione del sistema da risolvere che penalizza l'approccio diretto. Anche il tempo di convergenza di QUADPROG aumenta con $m$, ma in modo meno netto. 
+Confrontando invece PDIP-LDL e QUADPROG in Fig.\ref{fig:exp2.1}, notiamo come l'aumentare del numero di vincoli impatti in modo negativo sulle performance della nostra implementazione, probabilmente a causa dell'aumento della dimensione del sistema da risolvere che penalizza l'approccio diretto. Il tempo di convergenza di QUADPROG invece rimane costante all'aumentare di $m$, di conseguenza lo slowfactor aumenta al variare di $m$, rimanendo però compreso nell'intervallo $[2.3, 3.5]$.
 
-La Tabella \ref{tab:ldlqp2} conferma la stabilità del nostro metodo più veloce: si osservano infatti deviazioni standard trascurabili, dello stesso ordine di grandezza di QUADPROG; è possibile osservare anche che lo slowfactor aumenta in modo monotono al variare di $m$, rimanendo compreso nell'intervallo $[1.58, 2.7]$.
+La Tabella \ref{tab:ldlqp2} conferma la stabilità del nostro metodo più veloce: si osservano infatti deviazioni standard trascurabili, dello stesso ordine di grandezza di QUADPROG.
 
 \begin{table}[!h]
 \centering
 \begin{tabular}{c|c|c|c|c|c|c}
 
 $\mathbf{m}$            & \textbf{0.05} & \textbf{0.1} & \textbf{0.2} & \textbf{0.3} & \textbf{0.4} & \textbf{0.5} \\ \hline
-\textbf{PDIP-LDL}                    & $2.401 \pm 2.6\%$       & $2.403 \pm 1.8\%$       & $2.634     \pm 2\%$   & $3.062 \pm 3\%$      & $3.476 \pm 1.9\%$      & $3.743 \pm 2.8\%$       \\
-\textbf{QUADPROG}                    & $1.519 \pm 3.3\%$       & $1.256 \pm 2.4\%$       & $1.299 \pm 0.9\%$       & $1.351 \pm 1.6\%$       & $1.420 \pm 0.9\%$       & $1.382 \pm 3.6\%$       \\
-\textbf{\textit{slowfactor}} &\textbf{1.581}        & 1.913       & 2.027       & 2.267       & 2.446       & \textbf{2.707} 
+\textbf{PDIP-LDL}                    & $3.417 \pm 11.5\%$       & $3.416 \pm 11.5\%$       & $3.576     \pm 11\%$   & $3.839 \pm 10.2\%$      & $4.186 \pm 9.4\%$      & $4.33 \pm 9.1\%$       \\
+\textbf{QUADPROG}                    & $1.405 \pm 5.2\%$       & $1.431 \pm 5.4\%$       & $1.364 \pm 5.7\%$       & $1.246 \pm 6.2\%$       & $1.346 \pm 5.7\%$       & $1.249 \pm 6.2\%$       \\
+\textbf{\textit{slowfactor}} &2.431        & \textbf{2.387}      & 2.621       & 3.08       & 3.108       & \textbf{3.464} 
 \end{tabular}
 \caption{Tabella contenente media e deviazione standard dei tempi di esecuzione (s) di PDIP-LDL e QUADPROG relativi al secondo sotto-esperimento.\label{tab:ldlqp2}}
 \end{table}
@@ -151,37 +151,37 @@ Infine, osserviamo che in Fig. \ref{fig:exp2.2} il numero di iterazioni diminuis
 
  In questo gruppo di esperimenti abbiamo voluto testare qualora la densità della matrice $Q$ avesse effetti sui tempi di convergenza e il numero di iterazioni dei vari approcci coinvolti nella nostra analisi.
 
-\begin{figure}[h]
+\begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{img/MU4.png}
-    \caption{Tempo di esecuzione (in \textit{log-scale} sull'asse delle y) dei tre metodi all'aumentare della densità ($\delta$) di $Q$. \label{fig:exp3.1}}
+    \includegraphics[width=0.9\textwidth, height=7.3cm]{img/MU4.png}
+    \caption{Tempo di esecuzione dei tre metodi all'aumentare della densità ($\delta$) di $Q$. \label{fig:exp3.1}}
 \end{figure}
  
-Da Fig. \ref{fig:exp3.1} si evince che l'aumento di $\delta$ ha un impatto critico sulle prestazioni di QUADPROG, mentre entrambe le versioni della nostra implementazione non sembrano risentire troppo dell'aumento di densità della matrice $Q$, con PDIP-LDL più veloce di un ordine di grandezza rispetto a PDIP-GMRES. 
+Da Fig.\ref{fig:exp3.1} si evince che l'aumento di $\delta$ ha un impatto critico sulle prestazioni di PDIP-GMRES, mentre incide in maniera minore su quelle di PIDP-LDL e QUADPROG. Questo è ancora una volta conseguenza dell'utilizzo di GMRES che predilige matrici più sparse possibili. 
 
- In Fig. \ref{fig:exp3.2}, il numero di iterazioni necessarie alla convergenza rimane stabile rispetto alla variazione di densità di $Q$ in tutti i metodi testati. 
- 
- Confrontando infine i tempi di PDIP-LDL e QUADPROG in Tab. \ref{tab:ldlqp3}:
+ Confrontando pù in dettaglio i tempi di PDIP-LDL e QUADPROG in Tab. \ref{tab:ldlqp3}:
  \begin{itemize}
-     \item il tempo di completamento della versione con risoluzione diretta della nostra implementazione rimane costante e stabile all'aumentare della densità
+     \item il tempo di completamento della versione con risoluzione diretta della nostra implementazione inizialmente aumenta, poi diminuisce per poi stabilizzarsi introno a valori simili a quelli di QUADPROG
      \item il tempo di completamento di QUADPROG, invece, aumenta monotonamente
-     \item di conseguenza lo slowfactor è massimo in corrispondenza del valore minimo di $\delta$, minimo viceversa; in generale la nostra implementazione è più lenta di un fattore $\approx \times1.8$.
+     \item di conseguenza lo slowfactor è massimo in corrispondenza del valore minimo di $\delta$, minimo viceversa; in generale la nostra implementazione è più lenta di un fattore $\approx \times2.1$.
  \end{itemize}
 \begin{table}[!h]
 \centering
 \begin{tabular}{l|c|c|c|c|c|c}
 \textbf{density}                     & \textbf{0.1} & \textbf{0.3} & \textbf{0.5} & \textbf{0.7} & \textbf{0.9} & \textbf{1.0} \\ \hline
-\textbf{PDIP-LDL}                    & $2.401 \pm 1.2\%$       & $2.719 \pm 2.8\%$       & $2.695  \pm 2\%$       & $2.694 \pm 2.2\%$       & $2.696 \pm 2.3\%$       & $2.938  \pm 2.4\%$       \\
-\textbf{QUADPROG}                    & $0.681  \pm 2.2\%$      & $1.258  \pm 5\%$       & $1.583 \pm 2.8\%$       & $2.038 \pm 1.5\%$       & $2.202 \pm 1.1\%$       & $2.659 \pm 5.9\%$       \\
-\textbf{\textit{slowfactor}} & \textbf{3.526}       & 2.161       & 1.701       & 1.321       & 1.224       & \textbf{1.104}
+\textbf{PDIP-LDL}                    & $1.882 \pm 0.5\%$       & $3.026 \pm 1.5\%$       & $4.24  \pm 0.3\%$       & $4.943 \pm 0.3\%$       & $2.626 \pm 5.9\%$       & $2.489  \pm 1.6\%$       \\
+\textbf{QUADPROG}                    & $0.634  \pm 1.5\%$      & $1.33  \pm 1.2\%$       & $1.527 \pm 0.7\%$       & $1.942 \pm 1\%$       & $2.377 \pm 1.1\%$       & $2.441 \pm 0.9\%$       \\
+\textbf{\textit{slowfactor}} & \textbf{2.966}       & 2.274       & 2.775       & 2.522       & 1.104       & \textbf{1.009}
 \end{tabular}
 \caption{Tabella contenente media e deviazione standard dei tempi di esecuzione (s) di PDIP-LDL e QUADPROG relativi al terzo sotto-esperimento. \label{tab:ldlqp3}}
 \end{table}
 
+ Infine in Fig.\ref{fig:exp3.2} il numero di iterazioni necessarie convergenza rimane stabile rispetto alla variazione di densità di $Q$ in tutti i metodi testati, con valori identici a quelli osservati nella recedente sezione. 
+ 
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth, height = 6.7cm]{img/MU9.png}
+    \includegraphics[width=0.9\textwidth, height = 6.5cm]{img/MU9.png}
     \caption{Grafico dell'andamento del numero di iterazioni all'aumentare di $\delta$. \label{fig:exp3.2}}
 \end{figure}
 
@@ -194,7 +194,7 @@ Il grafico in Fig. \ref{fig:gap} mostra come varia - in scala logaritmica sull'a
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth, height = 7.5cm]{img/MU6.png}
+    \includegraphics[width=\textwidth, height = 8cm]{img/MU6.png}
     \caption{Andamento del gap (in \textit{log-scale} sull'asse delle y) all'aumentare delle iterazioni. \label{fig:gap}}
 \end{figure}
 
@@ -212,8 +212,8 @@ In Tab. \ref{tab:normx} e \ref{tab:norml} sono riportate medie e deviazioni stan
 \centering
 \begin{tabular}{c|c|l|c}
 $\mathbf{\norm{\delta x}}$ & \multicolumn{2}{c|}{\textbf{PDIP-GMRES}}         & \textbf{QUADPROG}          \\ \hline
-\textbf{PDIP-LDL}            & \multicolumn{2}{c|}{$3.3856\cdot10^{-13}\pm6\%$} & $4.3127\cdot10^{-3}\pm0\%$ \\ \hline
-\textbf{PDIP-GMRES}          & \multicolumn{2}{c|}{}                            & $4.3127\cdot10^{-3}\pm0\%$
+\textbf{PDIP-LDL}            & \multicolumn{2}{c|}{$4.2927\cdot10^{-13}\pm0\%$} & $5.4785\cdot10^{-3}\pm0\%$ \\ \hline
+\textbf{PDIP-GMRES}          & \multicolumn{2}{c|}{}                            & $5.4785\cdot10^{-3}\pm0\%$
 \end{tabular}
 \caption{Media e deviazione standard, sulle 20 ripetizioni, della norma della differenza fra i vettori soluzione.\label{tab:normx}}
 \end{table}
@@ -221,8 +221,8 @@ $\mathbf{\norm{\delta x}}$ & \multicolumn{2}{c|}{\textbf{PDIP-GMRES}}         & 
 \begin{table}[!h]
 \begin{tabular}{c|c|c|c|c|}
       $\mathbf{\norm{\delta\lambda}}$             & \multicolumn{2}{c|}{\textbf{PDIP-LDL}}                                        & \multicolumn{2}{c|}{\textbf{PDIP-GMRES}}                                      \\ \hline
-\textbf{PDIP-GMRES} & $1.6224\cdot10^{-13}\pm11\%$          & $1.1201\cdot10^{-12}\pm5.4\%$         & \multicolumn{2}{c|}{ }                                                        \\ 
-\textbf{QUADPROG}   & $1.5712\cdot10^{-3}\pm0\%$            & $5.3517\cdot10^{-3}\pm0\%$            & $1.5712\cdot10^{-3}\pm0\%$            & $5.3517\cdot10^{{-3}}\pm0\%$          \\
+\textbf{PDIP-GMRES} & $1.6224\cdot10^{-13}\pm0\%$          & $7.4955\cdot10^{-13}\pm0\%$         & \multicolumn{2}{c|}{ }                                                        \\ 
+\textbf{QUADPROG}   & $2.1561\cdot10^{-3}\pm0\%$            & $7.0229\cdot10^{-3}\pm0\%$            & $2.1561\cdot10^{-3}\pm0\%$            & $7.0229\cdot10^{{-3}}\pm0\%$          \\
                     & $\norm{ \delta\lambda_{eqlin} }$ & $\norm{ \delta\lambda_{s} }$ & $\norm{ \delta\lambda_{eqlin} }$ & $\norm{ \delta\lambda_{s} }$
 \end{tabular}
 \caption{Media e deviazione standard, sulle 20 ripetizioni, della norma della differenza fra i moltiplicatori lagrangiani soluzione dei metodi testati.\label{tab:norml}}
@@ -232,9 +232,9 @@ $\mathbf{\norm{\delta x}}$ & \multicolumn{2}{c|}{\textbf{PDIP-GMRES}}         & 
 \centering
 \begin{tabular}{c|c|c}
 \textbf{}           & $\mathbf{\norm{r_p}}$ & $\mathbf{\norm{r_d}}$ \\\hline
-\textbf{PDIP-LDL} &      $1.1741\cdot10^{-15} \pm8.9\%$                 &           $1.3726\cdot10^{-14} \pm11.4\%$             \\\hline
-\textbf{PDIP-GMRES}   &        $9.0965\cdot10^{-14} \pm13.3\%$               &            $1.1016\cdot10^{-12} \pm5.3\%$           \\\hline
-\textbf{QUADPROG}   &      $9.8679\cdot10^{-16} \pm0\%$                &            $9.3234\cdot10^{-15} \pm0.1\%$   \\    
+\textbf{PDIP-LDL} &      $1.2462\cdot10^{-15} \pm0\%$                 &           $3.1114\cdot10^{-14} \pm0\%$             \\\hline
+\textbf{PDIP-GMRES}   &        $1.0181\cdot10^{-13} \pm0\%$               &            $7.2054\cdot10^{-13} \pm0\%$           \\\hline
+\textbf{QUADPROG}   &      $1.3323\cdot10^{-15} \pm0\%$                &            $1.0767\cdot10^{-14} \pm0\%$   \\    
 \end{tabular}
 \caption{Tabella che riporta la media e deviazione standard su 20 esecuzioni della norma dei residui primali e duali finali dei tre metodi in analisi.}
 \label{tab:res}
@@ -244,8 +244,10 @@ Le soluzioni ottenute dall'esecuzione diretta e iterativa di PDIP risultano pres
 
 La Tabella \ref{tab:res} conferma ulteriormente la precisione della nostra implementazione: 
 \begin{itemize}
-    \item l'accuratezza raggiunta è paragonabile a quella di QUADPROG infatti sia il residuo primale, che duale sono maggiori di circa un ordine di grandezza rispetto alla built-in di \texttt{MATLAB}; probabilmente il nostro metodo potrebbe raggiungere precisione dello stesso ordine di grandezza di QUADPROG scegliendo una soglia $\eps$ più bassa rispetto a quella usata nei nostri esperimenti ($10^{-14}$), impiegando però più iterazioni e risultando più lento
-    \item durante tutta la fase sperimentale abbiamo osservato deviazioni standard più alte per la nostra implementazione. Questo fenomeno può essere spiegato dalla presenza di una parte randomica nel nostro metodo, precisamente in \ref{eq:startl} durante la generazione della tripla iniziale: $\lambda_{eq}$ viene inizializzato con reali casuali, influenzando anche l'inizializzazione di $\lambda_s$; QUADPROG invece inizializza sempre $(x^0, \lambda_{eq}^0, \lambda_s^0) = 1$, con risultati finali di conseguenza più simili fra loro.
+    \item l'accuratezza raggiunta è paragonabile a quella di QUADPROG, osserviamo infatti che PDIP-LDL risolve il problema con residuo primale e duale dello stesso ordine di grandezza di QUADPROG, PDIP-GMRES invece è meno accurato di circa un ordine di grandezza su entrambi i residui;
+    
+    probabilmente potrebbe raggiungere precisione dello stesso ordine di grandezza di QUADPROG scegliendo una soglia $\eps$ più bassa rispetto a quella usata nei nostri esperimenti ($10^{-14}$), impiegando però più iterazioni e risultando più lento
+    \item la deviazione standard è nulla in ogni tabella in questa sezione, quindi la nostra implementazione, fissato un problema, restituisce sempre la stessa soluzione, come anche QUADPROG; tuttavia durante il resto della fase sperimentale abbiamo osservato deviazioni standard (sui tempi di convergenza) più alte per la nostra implementazione. Questo fenomeno può essere spiegato dalla presenza di una parte randomica nel nostro metodo, precisamente in \ref{eq:startl} durante la generazione della tripla iniziale: $\lambda_{eq}$ viene inizializzato con reali casuali, influenzando anche l'inizializzazione di $\lambda_s$; QUADPROG invece inizializza sempre $(x^0, \lambda_{eq}^0, \lambda_s^0) = 1$, con risultati finali, in termini di tempo di convergenza, di conseguenza più simili fra loro.
 \end{itemize}
 
-Concludendo la nostra implementazione, sia in versione diretta, che iterativa, può essere quindi considerata stabile e accurata rispetto alla built-in di \texttt{MATLAB} sia in termini di tempi ed iterazioni di convergenza, che di precisione del risultato finale.
+Concludendo la nostra implementazione, sia in versione diretta, che iterativa, può essere considerata stabile e accurata rispetto alla built-in di \texttt{MATLAB} sia in termini di tempi ed iterazioni di convergenza, che di precisione del risultato finale.

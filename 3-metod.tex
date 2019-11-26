@@ -21,7 +21,7 @@ Da $P$ e $D$ si ricava quindi il sistema KKT \ref{eq:pkkt2} associato e una misu
 \State $\mu^0 \gets (x^{0\intercal} \lambda_s^0)/n$
 \State $\sigma \in [0,1]$
 \State $k \gets 0$
-\BState \textbf{while} \emph{k<maxit \& complementary\_gap < eps}
+\BState \textbf{while} \emph{k<maxit \& !(complementary\_gap < eps)}
 \State $\mu^{k+1} \gets \sigma \mu^{k}  $
 
 \State \textit{risolvere} \;$
