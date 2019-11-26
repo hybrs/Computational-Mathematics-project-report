@@ -1,5 +1,5 @@
-function [x, fval, lambda, exit_code, time, it, gaps] =  PDIP(problem, maxitt, eps, solver)
-%function [x, fval, lambda, exit_code, time, it, gaps] = PDIP(problem, maxitt, eps, solver)
+function [x, fval, lambda, exit_code, tm, it, gaps] =  PDIP(problem, maxitt, eps, solver)
+%function [x, fval, lambda, exit_code, tm, it, gaps] = PDIP(problem, maxitt, eps, solver)
 %
 %  Solves a CQP problem P with a primal-dual interior-point method
 %   
@@ -25,7 +25,7 @@ function [x, fval, lambda, exit_code, time, it, gaps] =  PDIP(problem, maxitt, e
 % - exit_code(integer): 1 if the gap reduced under the user-def threshold eps, 
 %                       2 if the number of iteration exceeded maxit
 %
-% - time(real): time in seconds
+% - tm(real): time in seconds
 %
 % - it(integer) :total number of iterations
 % 
@@ -48,7 +48,7 @@ k = size(A);
 k = k(1);
 
 
-x = []; fval = inf; lambda = []; exit_code = -1; time = 0; it = 0; gap = inf;
+x = []; fval = inf; lambda = []; exit_code = -1; tm = 0; it = 0; gap = inf;
 
 % Input checks
 %
@@ -123,7 +123,7 @@ while true
         break
     end
     
-    if gap <= eps
+    if gap < eps
         fprintf( 'Execution terminated because duality gap reduced under the threshold\n');
         lambda.lower = lambda_s;
         lambda.eqlin = lambda_eq;
@@ -139,15 +139,11 @@ while true
     J = [M, A';A, zeros(k, k)];
     r = -[ gradL - diag(1./x)*(sigma*mu*ones(n,1)) + lambda_s ;A*x-b];
     
-    tol = 1e-14;
     maxit = size(J);
     maxit = maxit(1);
-    
-    if solver=="minres"
-        [d, tmp] = minres(J, r, tol, maxit);
-    end
+
     if solver=="gmres"
-        [d, tmp] = gmres(J, r, [], tol, maxit);
+        [d, tmp] = gmres(J, r, [], eps, maxit);
     end
     if solver=="ldl"
         d = J\r;
@@ -181,6 +177,6 @@ while true
     
     mu = sigma*(x'*lambda_s)/n;
 end
-time = toc;
-fprintf( 'Primal-Dual Interior Point method terminated in %d iterations, elapsed time is %1.3e seconds\nfval = %1.3e and complementary gap = %1.3e\n', it, time, fval, gap);
+tm = toc;
+fprintf( 'Primal-Dual Interior Point method terminated in %d iterations\nelapsed time is %1.3e seconds\nfval = %1.3e and complementary gap = %1.3e\n', it, tm, fval, gap);
 end

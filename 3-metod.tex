@@ -19,9 +19,11 @@ Da $P$ e $D$ si ricava quindi il sistema KKT \ref{eq:pkkt2} associato e una misu
 \Function{PDIP}{Q, q, A, b, eps, maxit}
 \State \textit{inizializzare} $(x^0, \lambda_{eq}^0, \lambda_s^0) > 0$ 
 \State $\mu^0 \gets (x^{0\intercal} \lambda_s^0)/n$
+\State $\mathit{complementary\_gap}^0 \gets v(P(x^0)) - v(D(x^0,\lambda_{eq}^0,\lambda_s^0))$
 \State $\sigma \in [0,1]$
 \State $k \gets 0$
-\BState \textbf{while} \emph{k<maxit \& !(complementary\_gap < eps)}
+\BState \textbf{while} $k<maxit \;\; \land \;\; complementary\_gap^k \geq eps$
+
 \State $\mu^{k+1} \gets \sigma \mu^{k}  $
 
 \State \textit{risolvere} \;$
@@ -43,8 +45,8 @@ $
 \State $(x^{k+1}, \lambda_{eq}^{k+1}, \lambda_{s}^{k+1}) \gets
 (x^{k}, \lambda_{eq}^{k}, \lambda_{s}^{k}) + 
 (\alpha_x^{k+1}\Delta_x^{k+1}, \alpha_{\lambda_{eq}}^{k+1}\Delta_{\lambda_{eq}}^{k+1}, \alpha_{\lambda_{s}}^{k+1}\Delta_{\lambda_{s}}^{k+1})$
-
 \State $k \gets k + 1$
+\State $\mathit{complementary\_gap}^k \gets v(P(x^k)) - v(D(x^k,\lambda_{eq}^k,\lambda_s^k))$
 \EndFunction
 \end{algorithmic}
 \end{algorithm}

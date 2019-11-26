@@ -16,7 +16,11 @@ La tabella \ref{tab:struct} descrive i campi della generica struttura.
 \textbf{method }    & \textit{Stringa che specifica quale dei tre metodi è stato utilizzato.                                                                                       }                                                                                     \\\hline
 \textbf{times}      & \begin{tabular}[c]{@{}l@{}}\textit{Matrice di dimensione} $|parameters|\times nrepeat$ \\ \textit{che contiene i tempi di esecuzione del metodo per ogni}\\ \textit{valore }$\in$\textit{parameters e per ognuna delle }$nrepat$ \\ \textit{ripetizioni dell'esperimento}.\end{tabular}   \\\hline
 \textbf{iterations} & \begin{tabular}[c]{@{}l@{}}\textit{Matrice di dimensione }$|parameters|\times nrepeat$ \\\textit{ che contiene il numero di iterazioni del metodo per ogni}\\ \textit{valore } $\in$ \textit{parameters e per ognuna delle }$nrepat$\\ \textit{ripetizioni dell'esperimento.}\end{tabular} \\\hline
-\textbf{parameters} & \begin{tabular}[c]{@{}l@{}}\textit{Vettore che contiene i valori che verranno assunti dal parametro}\\ \textit{preso in esame nel sotto-esperimento corrente}.\end{tabular}                                                                               
+\textbf{parameters} & \begin{tabular}[c]{@{}l@{}}\textit{Vettore che contiene i valori che verranno assunti dal parametro}\\ \textit{preso in esame nel sotto-esperimento corrente}.\end{tabular}  \\\hline
+\textbf{fvals} & \begin{tabular}[c]{@{}l@{}}\textit{Matrice di dimensione }$|parameters|\times nrepeat$ \\\textit{che contiene il valore della funzione obiettivo nel punto} $x$ \\\textit{per ognuna delle }$nrepat$ \textit{ripetizioni dell'esperimento.}\end{tabular} \\\hline
+
+\textbf{solutions} & \begin{tabular}[c]{@{}l@{}}\textit{Vettore di }$|parameters|$ \textit{strutture; ogni struttura contiene}\\ \textit{i campi \texttt{x}, \texttt{lambdaLower} e \texttt{lambdaEq}}\textit{che conterranno rispettivamente} \\ \textit{una matrice di dimensione } $|nrepeat|\times n$ \textit{per le soluzioni }$x$ \textit{e} $\lambda_s$ \\ \textit{e una matrice di dimensione} $|nrepeat|\times m$\textit{ per il vettore soluzione} $\lambda_{eq}$\\\textit{per ognuna delle }$nrepat$ \textit{ripetizioni dell'esperimento.}\end{tabular}
+
 \end{tabular}
 \caption{Tabella che descrive i campi delle strutture che contengono i risultati sperimentali.}
 \label{tab:struct}
@@ -88,7 +92,7 @@ In particolare:
     \caption{Tabella contenente la deviazione standard dei tempi di esecuzione di PDIP-LDL e QUADPROG relativi al primo sotto-esperimento. \label{tab:ldlqp1.1}}
 \end{table}
 
-La Tab. \ref{tab:ldlqp1.1} mostra come le prestazioni ottenute sono stabili anche in termini di deviazione standard; si nota un leggero aumento di quest'ultima sulle istanze piccole del problema in quanto i tempi in gioco sono davvero piccoli e una piccola variazione incide maggiormente sulla metrica.
+\newpage La Tab. \ref{tab:ldlqp1.1} mostra come le prestazioni ottenute sono stabili anche in termini di deviazione standard; si nota un leggero aumento di quest'ultima sulle istanze piccole del problema in quanto i tempi in gioco sono davvero piccoli e una piccola variazione incide maggiormente sulla metrica.
 
 L'incremento dell'input-size non sembra invece influire in maniera significativa sul  numero di iterazioni necessarie alla convergenza dei metodi.
 Il grafico in Fig.\ref{fig:exp1.2} mostra infatti come, a prescindere dal valore di $n$, PDIP impieghi circa 20 iterazioni mentre QUADPROG circa 7.
@@ -137,7 +141,7 @@ $\mathbf{m}$            & \textbf{0.05} & \textbf{0.1} & \textbf{0.2} & \textbf{
 \caption{Tabella contenente media e deviazione standard dei tempi di esecuzione (s) di PDIP-LDL e QUADPROG relativi al secondo sotto-esperimento.\label{tab:ldlqp2}}
 \end{table}
 
-Infine, osserviamo che in Fig. \ref{fig:exp2.2} il numero di iterazioni diminuisce all'aumentare di $m$, questo però non vale per QUADPROG il cui numero di iterazioni non viene influenzato dalla frazione di vincoli rispetto alla dimensione dell'input.
+Infine, in Fig. \ref{fig:exp2.2}, il numero di iterazioni non viene influenzato dalla frazione di vincoli rispetto alla dimensione dell'input: la nostra implementazione impiega 21 iterazioni, mentre la built-in di \texttt{MATLAB} 8.
 
 
 \begin{figure}[!h]
@@ -153,15 +157,15 @@ Infine, osserviamo che in Fig. \ref{fig:exp2.2} il numero di iterazioni diminuis
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.9\textwidth, height=7.3cm]{img/MU4.png}
+    \includegraphics[width=0.8\textwidth, height=5.6cm]{img/MU4.png}
     \caption{Tempo di esecuzione dei tre metodi all'aumentare della densità ($\delta$) di $Q$. \label{fig:exp3.1}}
 \end{figure}
  
-Da Fig.\ref{fig:exp3.1} si evince che l'aumento di $\delta$ ha un impatto critico sulle prestazioni di PDIP-GMRES, mentre incide in maniera minore su quelle di PIDP-LDL e QUADPROG. Questo è ancora una volta conseguenza dell'utilizzo di GMRES che predilige matrici più sparse possibili. 
+Da Fig.\ref{fig:exp3.1} si evince che l'aumento di $\delta$ ha un impatto critico sulle prestazioni di PDIP-GMRES, mentre incide in maniera minore su quelle di PIDP-LDL e QUADPROG. Questo è ancora una volta conseguenza dell'utilizzo di GMRES che predilige matrici sparse. 
 
- Confrontando pù in dettaglio i tempi di PDIP-LDL e QUADPROG in Tab. \ref{tab:ldlqp3}:
+ Confrontando più in dettaglio i tempi di PDIP-LDL e QUADPROG in Tab.\ref{tab:ldlqp3}:
  \begin{itemize}
-     \item il tempo di completamento della versione con risoluzione diretta della nostra implementazione inizialmente aumenta, poi diminuisce per poi stabilizzarsi introno a valori simili a quelli di QUADPROG
+     \item il tempo di completamento della versione con risoluzione diretta della nostra implementazione inizialmente aumenta, poi diminuisce per poi stabilizzarsi intorno a valori simili a quelli di QUADPROG
      \item il tempo di completamento di QUADPROG, invece, aumenta monotonamente
      \item di conseguenza lo slowfactor è massimo in corrispondenza del valore minimo di $\delta$, minimo viceversa; in generale la nostra implementazione è più lenta di un fattore $\approx \times2.1$.
  \end{itemize}
@@ -176,12 +180,12 @@ Da Fig.\ref{fig:exp3.1} si evince che l'aumento di $\delta$ ha un impatto critic
 \caption{Tabella contenente media e deviazione standard dei tempi di esecuzione (s) di PDIP-LDL e QUADPROG relativi al terzo sotto-esperimento. \label{tab:ldlqp3}}
 \end{table}
 
- Infine in Fig.\ref{fig:exp3.2} il numero di iterazioni necessarie convergenza rimane stabile rispetto alla variazione di densità di $Q$ in tutti i metodi testati, con valori identici a quelli osservati nella recedente sezione. 
+ Infine in Fig.\ref{fig:exp3.2} il numero di iterazioni necessarie convergenza rimane stabile rispetto alla variazione di densità di $Q$ in tutti i metodi testati, con valori identici a quelli osservati nella precedente sezione. 
  
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=0.9\textwidth, height = 6.5cm]{img/MU9.png}
+    \includegraphics[width=0.75\textwidth, height = 4.65cm]{img/MU9.png}
     \caption{Grafico dell'andamento del numero di iterazioni all'aumentare di $\delta$. \label{fig:exp3.2}}
 \end{figure}
 
