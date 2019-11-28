@@ -10,7 +10,7 @@ In ![this report](main.pdf) we describe the problem, our implementation choices 
 #### Usage
 
 To run an experiment with our implemented primal-dual algorithm you have to:
-- initialize a constrained CQP problem with **proper dimensions** (see [report](main.pdf) for details)
+- initialize a constrained CQP problem with **proper dimensions** (see ![report](main.pdf) for details)
 - run the algorithm with the desired linear solver (``'gmres' | 'ldl'``)
 
 ```
@@ -33,4 +33,15 @@ Primal-Dual Interior Point method terminated in 20 iterations
 elapsed time is 3.3502 seconds
 fval = -6.074e+01 and complementary gap = 7.019e-15
 ```
+The data scructures used to store the results can be found in the ``results`` directory; for further details about fields and dimensions have a look at Section 5 of the ![report](main.pdf).
 
+
+<!--| Field | Description                                                                                                                                                                                                                                                                                                                                          |
+|---------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *experiment* | Stringa che identifica il sotto-esperimento. 
+|     *method* | Stringa che specifica quale dei tre metodi è stato utilizzato.                                                                                                                                                                                                                                                                                                                        |
+|      *times* | Matrice di dimensione $|parameters|\times nrepeat$ che contiene i tempi di esecuzione del metodo per ogni valore $\in$ parameters e per ognuna delle $nrepat$ ripetizioni dell'esperimento.                                                                                                                                                                                     |
+| *iterations* | Matrice di dimensione $|parameters|\times nrepeat$  che contiene il numero di iterazioni del metodo per ogni valore $\in parameters $ e per ognuna delle $nrepat$ ripetizioni dell'esperimento.                                                                                                                                                                                 |
+|  *parameters* | Vettore che contiene i valori che verranno assunti dal parametro preso in esame nel sotto-esperimento corrente.                                                                                                                                                                                                                                                                    |
+|      *fvals* | Matrice di dimensione $|parameters|\times nrepeat$  che contiene il valore della funzione obiettivo nel punto $x$ per ognuna delle $nrepat$ ripetizioni dell'esperimento.                                                                                                                                                                                                        |
+|  *solutions* | Vettore di $|parameters|$ strutture; ogni struttura contiene i campi ``x``, ``lambdaLower`` e ``lambdaEq`` che conterranno rispettivamente una matrice di dimensione $|nrepeat|\times n$ per le soluzioni $x$ e $\lambda_s$ e una matrice di dimensione $|nrepeat|\times m$ per il vettore soluzione $\lambda_{eq}$ per ognuna delle $nrepat$ ripetizioni dell'esperimento. |-->
