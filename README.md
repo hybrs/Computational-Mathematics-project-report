@@ -7,7 +7,7 @@ This repository contains the implemented soluition for the noML project #3 of *[
 
 In ![this report](main.pdf) we describe the problem, our implementation choices and experimental results. All the code is developed in ``MATLAB`` and can be found in the ``src`` folder of this repository.
 
-#### Usage
+### Usage
 
 To run an experiment with our implemented primal-dual algorithm you have to:
 - initialize a constrained CQP problem with **proper dimensions** (see ![report](main.pdf) for details)
