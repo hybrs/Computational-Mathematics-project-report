@@ -18,36 +18,37 @@ La nostra soluzione è composta da cinque files:
     
 \end{itemize}
 
-Di seguito, in Codice 4.1, riportiamo un esempio di utilizzo dei files appena descritti che risolve un problema come quello in analisi, di dimensione $n=1000$ con $k=200$ vincoli e densità di $Q$ pari a $0.4$, usando LDL come metodo per la risoluzione del sistema KKT.
+Tutto il codice prodotto è consultabile anche come \textit{repository} su \texttt{GitHub} all'indirizzo \url{https://github.com/hybrs/Computational-Matemathics-project-report}.
+Oltre al codice è possibile trovare una guida all'utilizzo delle varie funzioni definite.
 \newpage
-\noindent
-\texttt{>> n = 1000; m = 200; delta = 0.4;}\\
-\texttt{>> p = genProblem(n, m, delta);}\\
-\texttt{>> PDIP(p, 100, 1e-14, \virg{ldl});}\\
-\noindent
-\texttt{Primal-Dual Interior Point method}
-\begin{table}[!h]
-\begin{tabular}{ccccccllllllllllllll}
-\texttt{iter}                                              & \texttt{fval}                                                                  & \texttt{gap}                                                                   & \texttt{dualf}                                                                 & \texttt{primalf}              & \texttt{sTx}                  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
-\multicolumn{6}{l}{$-----------------------------------------$}                                                                                                                                                                                                                                                                                                         &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
-\texttt{1}                                                 & \texttt{1.669e+01}                                                             & \texttt{2.470e+01}                                                             & \texttt{4.274e+01}                                                             & \texttt{7.364e-16}            & \texttt{4.124e+02}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
-\texttt{2}                                                 & \texttt{-6.276e+00}                                                            & \texttt{2.969e+01}                                                             & \texttt{3.032e+00}                                                             & \texttt{7.135e-15}            & \texttt{1.863e+02}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
-\texttt{3}                                                 & \texttt{-3.370e+01}                                                            & \texttt{2.461e+00}                                                             & \texttt{9.211e+00}                                                             & \texttt{9.905e-15}            & \texttt{8.294e+01}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
-\texttt{\begin{tabular}[c]{@{}c@{}}.\\ .\\ .\end{tabular}} &  \multicolumn{1}{l}{\texttt{}} & \multicolumn{1}{l}{\texttt{}} &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
-\texttt{21}                                                & \texttt{-6.565e+01}                                                            & \texttt{2.554e-13}                                                             & \texttt{1.201e-12}                                                             & \texttt{1.138e-15}            & \texttt{1.677e-11}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
-\texttt{22}                                                & \texttt{-6.565e+01}                                                            & \texttt{4.200e-14}                                                             & \texttt{1.979e-13}                                                             & \texttt{1.196e-15}            & \texttt{2.754e-12}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
-\texttt{23}                                                & \texttt{-6.565e+01}                                                            & \texttt{6.927e-15}                                                             & \texttt{3.322e-14}                                                             & \texttt{1.053e-15}            & \texttt{4.522e-13}            &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\end{tabular}
-\end{table}
+%\noindent
+%\texttt{>> n = 1000; m = 200; delta = 0.4;}\\
+%\texttt{>> p = genProblem(n, m, delta);}\\
+%\texttt{>> PDIP(p, 100, 1e-14, \virg{ldl});}\\
+%\noindent
+%\texttt{Primal-Dual Interior Point method}
+%\begin{table}[!h]
+%\begin{tabular}{ccccccllllllllllllll}
+%\texttt{iter}                                              & \texttt{fval}                                                                  & \texttt{gap}                                                                   & \texttt{dualf}                                                                 & \texttt{primalf}              & \texttt{sTx}                  &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+%\multicolumn{6}{l}{$-----------------------------------------$}                                                                                                                                                                                                                                                                                                         &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+%\texttt{1}                                                 & \texttt{1.669e+01}                                                             & \texttt{2.470e+01}                                                             & \texttt{4.274e+01}                                                             & \texttt{7.364e-16}            & \texttt{4.124e+02}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+%\texttt{2}                                                 & \texttt{-6.276e+00}                                                            & \texttt{2.969e+01}                                                             & \texttt{3.032e+00}                                                             & \texttt{7.135e-15}            & \texttt{1.863e+02}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+%\texttt{3}                                                 & \texttt{-3.370e+01}                                                            & \texttt{2.461e+00}                                                             & \texttt{9.211e+00}                                                             & \texttt{9.905e-15}            & \texttt{8.294e+01}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+%\texttt{\begin{tabular}[c]{@{}c@{}}.\\ .\\ .\end{tabular}} &  \multicolumn{1}{l}{\texttt{}} & \multicolumn{1}{l}{\texttt{}} &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+%\texttt{21}                                                & \texttt{-6.565e+01}                                                            & \texttt{2.554e-13}                                                             & \texttt{1.201e-12}                                                             & \texttt{1.138e-15}            & \texttt{1.677e-11}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+%\texttt{22}                                                & \texttt{-6.565e+01}                                                            & \texttt{4.200e-14}                                                             & \texttt{1.979e-13}                                                             & \texttt{1.196e-15}            & \texttt{2.754e-12}            &  &  &  &  &  &  &  &  &  &  &  &  &  &  \\
+%\texttt{23}                                                & \texttt{-6.565e+01}                                                            & \texttt{6.927e-15}                                                             & \texttt{3.322e-14}                                                             & \texttt{1.053e-15}            & \texttt{4.522e-13}            &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+%\end{tabular}
+%\end{table}
 
-\noindent
-\texttt{Execution terminated because duality gap reduced under the threshold\\
-Primal-Dual Interior Point method terminated in 23 iterations\\
-elapsed time is 2.3502 seconds\\
-fval = -6.565e+01 and complementary gap = 6.927e-15} 
-\begin{center}
-    {\small\textbf{Codice 4.1:} esempio di esecuzione del codice prodotto.}
-\end{center}
+%\noindent
+%\texttt{Execution terminated because duality gap reduced under the threshold\\
+%Primal-Dual Interior Point method terminated in 23 iterations\\
+%elapsed time is 2.3502 seconds\\
+%fval = -6.565e+01 and complementary gap = 6.927e-15} 
+%\begin{center}
+%    {\small\textbf{Codice 4.1:} esempio di esecuzione del codice prodotto.}
+%\end{center}
 \subsection{Esperimenti}
 Allo scopo di testare l'implementazione proposta sono stati effettuati esperimenti considerando PDIP sia con risoluzione iterativa (\emph{PDIP-GMRES}) che diretta (\textit{PDIP-LDL}) del sistema lineare.
 Inoltre tempi ed accuratezza del metodo da noi implementato sono stati confrontati con quelli della funzione \textit{built-in} di \texttt{MATLAB} \texttt{quadprog}.
