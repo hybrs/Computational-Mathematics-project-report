@@ -136,8 +136,8 @@ while true
     S = diag(lambda_s);
     M=2*Q+diag(lambda_s.*(1./x));
     
-    J = [M, A';A, zeros(k, k)];
-    r = -[ gradL - diag(1./x)*(sigma*mu*ones(n,1)) + lambda_s ;A*x-b];
+    J = sparse([M, A';A, zeros(k, k)]);
+    r = -sparse([ gradL - diag(1./x)*(sigma*mu*ones(n,1)) + lambda_s ;A*x-b]);
     
     maxit = size(J);
     maxit = maxit(1);
