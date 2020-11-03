@@ -1,5 +1,5 @@
 ## Primal-Dual Interior-Point method for Constrained CQP problem
-#### Computational Matemathics project report | a.y. 2018/19 | Prof. Poloni, Prof. Frangioni
+#### Computational Mathematics project report | a.y. 2018/19 | Prof. Poloni, Prof. Frangioni
 ##### Authors : [Giuliano Cornacchia](https://github.com/GiulianoCornacchia), [Mario Leonardo Salinas](https://github.com/hybrs)
 
 ### Intro
